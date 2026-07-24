@@ -1,0 +1,558 @@
+openapi: 3.1.1
+info:
+  title: Bloom Account API
+  version: 1.0.0
+  description: Inspect the authenticated account — profile, credit balance, and accessible workspaces.
+servers:
+- url: https://www.trybloom.ai/api/v1
+security:
+- apiKey: []
+- bearer: []
+tags:
+- name: Account
+  description: Inspect the authenticated account — profile, credit balance, and accessible workspaces.
+paths:
+  /account:
+    get:
+      operationId: account.get
+      summary: Get account
+      description: Return basic profile information for the authenticated API key owner. Useful as a whoami probe to verify which account a key belongs to.
+      tags:
+      - Account
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      email:
+                        type: string
+                      name:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                    required:
+                    - email
+                    - name
+                required:
+                - data
+        '401':
+          description: '401'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: UNAUTHORIZED
+                    status:
+                      const: 401
+                    message:
+                      type: string
+                      default: Invalid or missing API credentials
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '403':
+          description: '403'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: FORBIDDEN
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: Plan upgrade required
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '429':
+          description: '429'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: TOO_MANY_REQUESTS
+                    status:
+                      const: 429
+                    message:
+                      type: string
+                      default: Rate limit exceeded
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+  /credits:
+    get:
+      operationId: credits.get
+      summary: Get credit balance
+      description: Check the remaining credit balance for a workspace. Defaults to the caller's personal workspace; pass `workspaceId` to query a team workspace's balance.
+      tags:
+      - Account
+      parameters:
+      - name: workspaceId
+        in: query
+        schema:
+          type: string
+          minLength: 1
+          description: Team workspace ID. Omit to check the personal workspace balance.
+        allowEmptyValue: true
+        allowReserved: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      balance:
+                        type: number
+                      unlimited:
+                        type: boolean
+                    required:
+                    - balance
+                    - unlimited
+                required:
+                - data
+        '401':
+          description: '401'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: UNAUTHORIZED
+                    status:
+                      const: 401
+                    message:
+                      type: string
+                      default: Invalid or missing API credentials
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '403':
+          description: '403'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: FORBIDDEN
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: Plan upgrade required
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '404':
+          description: '404'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: WORKSPACE_NOT_FOUND
+                    status:
+                      const: 404
+                    message:
+                      type: string
+                      default: Workspace not found or not accessible
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '429':
+          description: '429'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: TOO_MANY_REQUESTS
+                    status:
+                      const: 429
+                    message:
+                      type: string
+                      default: Rate limit exceeded
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '500':
+          description: '500'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: INTERNAL_SERVER_ERROR
+                    status:
+                      const: 500
+                    message:
+                      type: string
+                      default: Failed to check credit balance
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+  /workspaces:
+    get:
+      operationId: workspaces.list
+      summary: List workspaces
+      description: 'List the workspaces the caller can access. The personal workspace (is_personal: true) is listed first and is the default for create operations (omit workspace_id to use it). List endpoints span all workspaces unless a workspace_id is given.'
+      tags:
+      - Account
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      workspaces:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            name:
+                              type: string
+                            is_personal:
+                              type: boolean
+                          required:
+                          - id
+                          - name
+                          - is_personal
+                    required:
+                    - workspaces
+                required:
+                - data
+        '401':
+          description: '401'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: UNAUTHORIZED
+                    status:
+                      const: 401
+                    message:
+                      type: string
+                      default: Invalid or missing API credentials
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '403':
+          description: '403'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: FORBIDDEN
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: Plan upgrade required
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '429':
+          description: '429'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: TOO_MANY_REQUESTS
+                    status:
+                      const: 429
+                    message:
+                      type: string
+                      default: Rate limit exceeded
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: 'Bloom API key, for example `x-api-key: bloom_sk_...`.'
+    bearer:
+      type: http
+      scheme: bearer
+      description: Bloom API key (`Bearer bloom_sk_...`) or Bloom OAuth access token.

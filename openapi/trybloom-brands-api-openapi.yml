@@ -1,0 +1,1703 @@
+openapi: 3.1.1
+info:
+  title: Bloom Account Brands API
+  version: 1.0.0
+  description: Inspect the authenticated account — profile, credit balance, and accessible workspaces.
+servers:
+- url: https://www.trybloom.ai/api/v1
+security:
+- apiKey: []
+- bearer: []
+tags:
+- name: Brands
+  description: Manage brands and brand identity.
+paths:
+  /brands:
+    get:
+      operationId: brands.list
+      summary: List brands
+      description: List brand sessions with cursor-based pagination. Use the returned IDs as brandSessionId when generating images.
+      tags:
+      - Brands
+      parameters:
+      - name: workspaceId
+        in: query
+        schema:
+          type: string
+          minLength: 1
+          description: Team workspace ID. Scopes results to that workspace. Omit to list across every workspace the caller can see.
+        allowEmptyValue: true
+        allowReserved: true
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 50
+          description: Results per page (1–100, default 50)
+        allowEmptyValue: true
+        allowReserved: true
+      - name: cursor
+        in: query
+        schema:
+          type: string
+          description: Pagination cursor from a previous response's nextCursor
+        allowEmptyValue: true
+        allowReserved: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      brands:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              format: uuid
+                            name:
+                              type: string
+                            url:
+                              type: string
+                            status:
+                              enum:
+                              - analyzing
+                              - ready
+                              - logo_required
+                              - failed
+                            imageCount:
+                              type: number
+                            workspaceId:
+                              anyOf:
+                              - type: string
+                              - type: 'null'
+                            workspaceName:
+                              type: string
+                            createdAt:
+                              type: string
+                              format: date-time
+                              x-native-type: date
+                          required:
+                          - id
+                          - name
+                          - url
+                          - status
+                          - imageCount
+                          - workspaceId
+                          - workspaceName
+                          - createdAt
+                      nextCursor:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      hasMore:
+                        type: boolean
+                    required:
+                    - brands
+                    - nextCursor
+                    - hasMore
+                required:
+                - data
+        '401':
+          description: '401'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: UNAUTHORIZED
+                    status:
+                      const: 401
+                    message:
+                      type: string
+                      default: Invalid or missing API credentials
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '403':
+          description: '403'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: FORBIDDEN
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: Plan upgrade required
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '429':
+          description: '429'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: TOO_MANY_REQUESTS
+                    status:
+                      const: 429
+                    message:
+                      type: string
+                      default: Rate limit exceeded
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+    post:
+      operationId: brands.create
+      summary: Create a brand
+      description: Queue brand onboarding for a website or Instagram profile URL. Returns 202 with an analyzing brand after the durable workflow is accepted. Call GET /brands/{id}?wait=true and generate only when status is "ready". `collectImages=false` skips background image-library collection, not crawling or visual DNA. Defaults to the caller's personal workspace; pass `workspaceId` to onboard into a team workspace.
+      tags:
+      - Brands
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+                  format: uri
+                  description: Website or Instagram profile URL to analyze (e.g. https://acme.com or https://instagram.com/acme)
+                workspaceId:
+                  type: string
+                  minLength: 1
+                  description: Team workspace ID. The brand is created in that workspace and billed to its customer. Omit to create in the caller's personal workspace.
+                logoUrl:
+                  type: string
+                  format: uri
+                  description: Explicit logo URL. If provided, skips automatic logo extraction.
+                collectImages:
+                  type: boolean
+                  default: true
+                  description: Whether to collect background images from the website/Instagram into the brand's image library. This does not skip brand initialization, crawling, or visual DNA analysis.
+              required:
+              - url
+      responses:
+        '202':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      status:
+                        const: analyzing
+                    required:
+                    - id
+                    - status
+                required:
+                - data
+        '400':
+          description: '400'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: INVALID_URL
+                    status:
+                      const: 400
+                    message:
+                      type: string
+                      default: Invalid URL
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '401':
+          description: '401'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: UNAUTHORIZED
+                    status:
+                      const: 401
+                    message:
+                      type: string
+                      default: Invalid or missing API credentials
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '403':
+          description: '403'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: FORBIDDEN
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: Plan upgrade required
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '404':
+          description: '404'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: WORKSPACE_NOT_FOUND
+                    status:
+                      const: 404
+                    message:
+                      type: string
+                      default: Workspace not found or not accessible
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '429':
+          description: '429'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: TOO_MANY_REQUESTS
+                    status:
+                      const: 429
+                    message:
+                      type: string
+                      default: Rate limit exceeded
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '500':
+          description: '500'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: INTERNAL_ERROR
+                    status:
+                      const: 500
+                    message:
+                      type: string
+                      default: Failed to start brand creation
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+  /brands/{id}:
+    get:
+      operationId: brands.get
+      summary: Get a brand
+      description: Get a brand by ID. When status is "ready", the brand can generate images. If status is "logo_required", provide a logo via PUT /brands/{id}/logo. A failed brand includes public-safe failure details. Use wait=true to hold the connection until ready, logo_required, or failed; a timeout returns the current analyzing resource.
+      tags:
+      - Brands
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Brand ID
+      - name: wait
+        in: query
+        required: false
+        schema:
+          anyOf:
+          - type: boolean
+          - enum:
+            - '0'
+            - '1'
+            - 'true'
+            - 'false'
+          default: false
+          description: Hold the connection until the resource reaches a terminal status
+        style: deepObject
+        explode: true
+        allowEmptyValue: true
+        allowReserved: true
+      - name: timeout
+        in: query
+        required: false
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 295
+          default: 120
+          description: Max seconds to wait (default 120, max 295)
+        allowEmptyValue: true
+        allowReserved: true
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      status:
+                        enum:
+                        - analyzing
+                        - ready
+                        - logo_required
+                        - failed
+                      failure:
+                        anyOf:
+                        - type: object
+                          properties:
+                            code:
+                              enum:
+                              - INVALID_URL
+                              - SCRAPE_FAILED
+                              - INSTAGRAM_FETCH_FAILED
+                              - INTERNAL_ERROR
+                              - VISUAL_DNA_FAILED
+                            message:
+                              type: string
+                          required:
+                          - code
+                          - message
+                        - type: 'null'
+                      name:
+                        type: string
+                      url:
+                        type: string
+                      logoUrl:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      logoError:
+                        type: string
+                      colors:
+                        type: array
+                        items:
+                          type: string
+                      fonts:
+                        type: array
+                        items:
+                          type: string
+                      aesthetic:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      summary:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      workspaceId:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      workspaceName:
+                        type: string
+                      createdAt:
+                        type: string
+                        format: date-time
+                        x-native-type: date
+                    required:
+                    - id
+                    - status
+                    - failure
+                    - name
+                    - url
+                    - logoUrl
+                    - colors
+                    - fonts
+                    - aesthetic
+                    - summary
+                    - workspaceId
+                    - workspaceName
+                    - createdAt
+                required:
+                - data
+        '401':
+          description: '401'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: UNAUTHORIZED
+                    status:
+                      const: 401
+                    message:
+                      type: string
+                      default: Invalid or missing API credentials
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '403':
+          description: '403'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: FORBIDDEN
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: Plan upgrade required
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '404':
+          description: '404'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: BRAND_NOT_FOUND
+                    status:
+                      const: 404
+                    message:
+                      type: string
+                      default: Brand not found
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '429':
+          description: '429'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: TOO_MANY_REQUESTS
+                    status:
+                      const: 429
+                    message:
+                      type: string
+                      default: Rate limit exceeded
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+    delete:
+      operationId: brands.delete
+      summary: Delete a brand
+      description: Delete a brand by ID. Returns the deleted brand's id, name, and owning workspace. Deleting the same brand twice returns 404.
+      tags:
+      - Brands
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Brand ID
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties: {}
+              required: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      name:
+                        type: string
+                      workspaceId:
+                        anyOf:
+                        - type: string
+                        - type: 'null'
+                      workspaceName:
+                        type: string
+                    required:
+                    - id
+                    - name
+                    - workspaceId
+                    - workspaceName
+                required:
+                - data
+        '401':
+          description: '401'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: UNAUTHORIZED
+                    status:
+                      const: 401
+                    message:
+                      type: string
+                      default: Invalid or missing API credentials
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '403':
+          description: '403'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: FORBIDDEN
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: Plan upgrade required
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '404':
+          description: '404'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: BRAND_NOT_FOUND
+                    status:
+                      const: 404
+                    message:
+                      type: string
+                      default: Brand not found
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '429':
+          description: '429'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: TOO_MANY_REQUESTS
+                    status:
+                      const: 429
+                    message:
+                      type: string
+                      default: Rate limit exceeded
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+  /brands/{id}/logo:
+    put:
+      operationId: brands.updateLogo
+      summary: Update brand logo (url)
+      description: Update the logo for a brand session. Downloads and validates the logo, then starts (or restarts) visual DNA extraction and returns status "analyzing". For image-based onboarding the stitched collage is preserved as the visual identity, so no extraction runs and status "ready" is returned. Common when status is "logo_required", but also works for replacing an existing logo on ready brands.
+      tags:
+      - Brands
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Brand ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                logoUrl:
+                  type: string
+                  format: uri
+                  description: Direct URL to the logo image (PNG, JPG, SVG, or WEBP)
+              required:
+              - logoUrl
+      responses:
+        '202':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      status:
+                        enum:
+                        - analyzing
+                        - ready
+                    required:
+                    - id
+                    - status
+                required:
+                - data
+        '400':
+          description: '400'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: INVALID_LOGO
+                    status:
+                      const: 400
+                    message:
+                      type: string
+                      default: Logo could not be downloaded or validated
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '401':
+          description: '401'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: UNAUTHORIZED
+                    status:
+                      const: 401
+                    message:
+                      type: string
+                      default: Invalid or missing API credentials
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '403':
+          description: '403'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: FORBIDDEN
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: Plan upgrade required
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '404':
+          description: '404'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: BRAND_NOT_FOUND
+                    status:
+                      const: 404
+                    message:
+                      type: string
+                      default: Brand not found
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '429':
+          description: '429'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: TOO_MANY_REQUESTS
+                    status:
+                      const: 429
+                    message:
+                      type: string
+                      default: Rate limit exceeded
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+  /brands/{id}/logo/file:
+    put:
+      operationId: brands.uploadLogoFile
+      summary: Update brand logo (file)
+      description: Update the logo for a brand by uploading raw bytes (multipart/form-data). Use this when the logo is local — for remote URLs, use PUT /brands/{id}/logo. Validates and processes the file (SVG and AVIF are converted to PNG; transparency gets an optimal background), then starts (or restarts) visual DNA extraction.
+      tags:
+      - Brands
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Brand ID
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  anyOf:
+                  - type: string
+                    contentMediaType: image/png
+                  - type: string
+                    contentMediaType: image/jpeg
+                  - type: string
+                    contentMediaType: image/webp
+                  - type: string
+                    contentMediaType: image/svg+xml
+                  - type: string
+                    contentMediaType: image/avif
+                  description: Logo file (PNG, JPEG, WebP, SVG, or AVIF, max 10MB)
+              required:
+              - file
+      responses:
+        '202':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      status:
+                        enum:
+                        - analyzing
+                        - ready
+                    required:
+                    - id
+                    - status
+                required:
+                - data
+        '400':
+          description: '400'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: INVALID_LOGO
+                    status:
+                      const: 400
+                    message:
+                      type: string
+                      default: Logo could not be validated
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '401':
+          description: '401'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: UNAUTHORIZED
+                    status:
+                      const: 401
+                    message:
+                      type: string
+                      default: Invalid or missing API credentials
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '403':
+          description: '403'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: FORBIDDEN
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: Plan upgrade required
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '404':
+          description: '404'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: BRAND_NOT_FOUND
+                    status:
+                      const: 404
+                    message:
+                      type: string
+                      default: Brand not found
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '429':
+          description: '429'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: TOO_MANY_REQUESTS
+                    status:
+                      const: 429
+                    message:
+                      type: string
+                      default: Rate limit exceeded
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+  /brands/{id}/logo/file/signed/{token}:
+    put:
+      operationId: brands.uploadLogoFileSigned
+      summary: Update brand logo (signed)
+      description: Update the logo for a brand by uploading raw bytes (multipart/form-data) using a short-lived, single-use token minted via the bloom_create_logo_upload_url MCP tool. The token in the path is the credential — no Authorization header is expected. Same validation/storage pipeline as PUT /brands/{id}/logo/file.
+      tags:
+      - Brands
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Brand ID
+      - name: token
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+          description: Short-lived upload token from bloom_create_logo_upload_url
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  anyOf:
+                  - type: string
+                    contentMediaType: image/png
+                  - type: string
+                    contentMediaType: image/jpeg
+                  - type: string
+                    contentMediaType: image/webp
+                  - type: string
+                    contentMediaType: image/svg+xml
+                  - type: string
+                    contentMediaType: image/avif
+                  description: Logo file (PNG, JPEG, WebP, SVG, or AVIF, max 10MB)
+              required:
+              - file
+      responses:
+        '202':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        format: uuid
+                      status:
+                        enum:
+                        - analyzing
+                        - ready
+                    required:
+                    - id
+                    - status
+                required:
+                - data
+        '400':
+          description: '400'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: INVALID_LOGO
+                    status:
+                      const: 400
+                    message:
+                      type: string
+                      default: Logo could not be validated
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '401':
+          description: '401'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: INVALID_UPLOAD_TOKEN
+                    status:
+                      const: 401
+                    message:
+                      type: string
+                      default: Upload token is invalid, expired, or already used
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+        '404':
+          description: '404'
+          content:
+            application/json:
+              schema:
+                oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: BRAND_NOT_FOUND
+                    status:
+                      const: 404
+                    message:
+                      type: string
+                      default: Brand not found
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: false
+                    code:
+                      type: string
+                    status:
+                      type: number
+                    message:
+                      type: string
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+components:
+  securitySchemes:
+    apiKey:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: 'Bloom API key, for example `x-api-key: bloom_sk_...`.'
+    bearer:
+      type: http
+      scheme: bearer
+      description: Bloom API key (`Bearer bloom_sk_...`) or Bloom OAuth access token.
