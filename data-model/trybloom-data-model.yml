@@ -1,0 +1,29 @@
+generated: '2026-07-21'
+method: derived
+source: >-
+  Derived from openapi/trybloom-api-openapi.json (paths, parameters and inline
+  response schemas — the spec inlines schemas rather than using
+  components.schemas $refs) and the object semantics documented at
+  https://www.trybloom.ai/docs/api and https://www.trybloom.ai/docs/llms.txt.
+docs: https://www.trybloom.ai/docs/api
+notation: >-
+  relationships use has_one / has_many / belongs_to with the foreign-key field
+  name; direction is from the entity that owns the reference.
+
+entities:
+  - {name: Account, id_prefix: null, domain: identity, description: The authenticated API key / OAuth identity (GET /account is the whoami probe).}
+  - {name: Workspace, id_prefix: null, domain: identity, description: Ownership and billing boundary; the personal workspace (is_personal true) is the default. Credits are per-workspace.}
+  - {name: Brand, id_prefix: null, domain: brand, description: A brand session (brandSessionId) onboarded from a website or Instagram URL; states analyzing / ready / logo_required / failed. Carries logo, palette, tone and visual DNA.}
+  - {name: Image, id_prefix: null, domain: images, description: A generated, uploaded, or scraped image; states queued/processing -> completed / failed. Generated via prompts scoped to a brand.}
+  - {name: CreditBalance, id_prefix: null, domain: billing, description: Remaining credits for a workspace (GET /credits).}
+
+relationships:
+  - {from: Workspace, to: Account, type: belongs_to, via: caller identity}
+  - {from: Brand, to: Workspace, type: belongs_to, via: workspaceId}
+  - {from: Image, to: Brand, type: belongs_to, via: brandSessionId}
+  - {from: Image, to: Workspace, type: belongs_to, via: workspaceId}
+  - {from: Image, to: Image, type: has_many, via: "referenceImageIds (style/content references for generate and edit)"}
+  - {from: Image, to: Image, type: has_one, via: "edit/resize/remove-background/vectorize produce a new Image derived from the source image id"}
+  - {from: Workspace, to: CreditBalance, type: has_one, via: workspaceId}
+  - {from: Workspace, to: Brand, type: has_many, via: workspaceId}
+  - {from: Brand, to: Image, type: has_many, via: "brandSessionId (generated plus library images: uploaded and scraped)"}

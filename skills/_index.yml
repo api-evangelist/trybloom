@@ -1,0 +1,21 @@
+generated: '2026-07-21'
+method: generated
+source: >-
+  Packaged Agent Skills generated from openapi/trybloom-api-openapi.json (live
+  spec at https://www.trybloom.ai/api/v1/spec.json) and the Bloom docs guides
+  (docs/api, docs/mcp). Every step is grounded in an operationId verified
+  verbatim in the spec; cross-cutting rules cite ../conventions/, ../errors/
+  and ../authentication/.
+skills:
+  - file: trybloom-onboard-brand-and-generate.md
+    name: Onboard a brand and generate an on-brand image
+    api: openapi/trybloom-api-openapi.json
+    operations: [brands.create, brands.get, images.generate, images.get, credits.get]
+  - file: trybloom-edit-and-adapt-image.md
+    name: Edit and adapt an image
+    api: openapi/trybloom-api-openapi.json
+    operations: [images.edit, images.resize, images.removeBackground, images.vectorize, images.get, images.list]
+  - file: trybloom-reference-driven-generation.md
+    name: Reference-driven generation from the brand library
+    api: openapi/trybloom-api-openapi.json
+    operations: [images.upload, images.search, images.generate, images.get]

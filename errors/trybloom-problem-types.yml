@@ -1,0 +1,75 @@
+generated: '2026-07-21'
+method: derived
+format: bloom-error-envelope
+source: >-
+  Derived from the 4xx/5xx responses and error-code const/enum values in
+  openapi/trybloom-api-openapi.json (live spec at
+  https://www.trybloom.ai/api/v1/spec.json), enriched from the error tables in
+  https://www.trybloom.ai/docs/api/index.md,
+  https://www.trybloom.ai/docs/api/usage-limits.md and
+  https://www.trybloom.ai/docs/api/guides/automation.md. Bloom does NOT use
+  RFC 9457 application/problem+json; every error is returned as
+  {"error": {"code", "status", "message"}}.
+envelope:
+  media_type: application/json
+  shape: '{ "error": { "code": string, "status": number, "message": string } }'
+  guidance: >-
+    Branch on error.code, not on message or (for 402s) the HTTP status alone.
+    402 responses include a data.action_url deep link to resolve payment.
+    Async brand failures surface inside the 200/202 resource as a non-null
+    failure object with a stable code and a user-safe message.
+problems:
+  - status: 400
+    title: Bad Request
+    codes: [INVALID_URL, INVALID_LOGO, INVALID_CURSOR, DOWNLOAD_FAILED, FILE_TOO_LARGE,
+      IMAGE_TOO_SMALL, UNSUPPORTED_FORMAT, IMAGE_NOT_COMPLETED, IMAGE_NOT_RESIZABLE,
+      IMAGE_NOT_VECTORIZABLE, IMAGE_NOT_REMOVABLE_BACKGROUND, EDIT_SUBJECT_NOT_COMPLETED,
+      EDIT_SUBJECT_NO_STORAGE_PATH, REFERENCE_LIMIT_EXCEEDED, SAME_ASPECT_RATIO,
+      SESSION_MISSING_BRAND_IMAGE]
+    meaning: Validation failure on the request payload, cursor, uploaded file, or image state.
+  - status: 401
+    title: Unauthorized
+    codes: [UNAUTHORIZED, INVALID_UPLOAD_TOKEN]
+    meaning: Missing or invalid API key / OAuth access token, or an expired signed-upload token.
+    remediation: Send x-api-key or Authorization Bearer with a valid bloom_sk_ key or OAuth token.
+  - status: 402
+    title: Payment Required
+    codes: [INSUFFICIENT_CREDITS, PAYMENT_REQUIRED]
+    meaning: >-
+      INSUFFICIENT_CREDITS: the workspace credit balance is zero.
+      PAYMENT_REQUIRED: the subscription is paused (failed or pending payment)
+      and blocks generation even with a positive balance.
+    remediation: Follow data.action_url to top up credits, resume the subscription, or upgrade the plan.
+  - status: 403
+    title: Forbidden
+    codes: [FORBIDDEN, FEATURE_NOT_ENTITLED]
+    meaning: The key lacks access to the resource, or the plan does not include the feature (e.g. 4K on free credits).
+  - status: 404
+    title: Not Found
+    codes: [BRAND_NOT_FOUND, IMAGE_NOT_FOUND, SESSION_NOT_FOUND, WORKSPACE_NOT_FOUND,
+      REFERENCE_IMAGE_NOT_FOUND, EDIT_SUBJECT_NOT_FOUND]
+    meaning: The referenced brand, image, workspace, or reference does not exist or belongs to another account.
+  - status: 409
+    title: Conflict
+    codes: [BRAND_NOT_READY]
+    meaning: The brand is still analyzing, needs a logo, or failed; generation cannot start.
+    remediation: Inspect GET /brands/{id} (optionally with wait=true) and retry once status is ready.
+  - status: 422
+    title: Unprocessable Entity
+    codes: [BRAND_NOT_FOUND]
+    meaning: The brandSessionId supplied to a generation does not resolve to a usable brand.
+  - status: 429
+    title: Too Many Requests
+    codes: [TOO_MANY_REQUESTS]
+    meaning: More than 120 requests per minute (sliding window) on one API key.
+    remediation: Back off and retry after the window resets; contact support@trybloom.ai for a higher ceiling.
+  - status: 500
+    title: Internal Server Error
+    codes: [INTERNAL_ERROR, INTERNAL_SERVER_ERROR]
+    meaning: Unexpected server-side failure.
+async_failure_codes:
+  description: >-
+    Brand onboarding is asynchronous; a failed brand carries failure.code in
+    the 200 resource rather than an HTTP error.
+  codes: [INVALID_URL, SCRAPE_FAILED, INSTAGRAM_FETCH_FAILED, INTERNAL_ERROR, VISUAL_DNA_FAILED]
+  image_failure_reasons: [content_safety]

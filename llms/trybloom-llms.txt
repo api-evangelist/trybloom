@@ -1,0 +1,153 @@
+# Bloom
+
+> The brand layer for agents. Bloom turns your brand into a working system that powers everything you create. Available as a web app, REST API, and MCP server.
+
+Connect everything that defines your brand: decks, sites, Figma, social, images. Bloom unifies it into one system — aesthetics, voice, references, products — callable from any app, agent, or platform. Inside Bloom. Embedded in your software via the API. Invoked by agents through MCP.
+
+## Product
+
+- [Features](https://www.trybloom.ai/features/): Generate, edit, resize, upload, 4K output, team collaboration — all on-brand
+- [Pricing](https://www.trybloom.ai/pricing/): Plus ($20/mo, 50 credits), Pro ($35/mo, 100 credits)
+- [Bloom for Claude](https://www.trybloom.ai/mcp/claude): Native connector for claude.ai, Claude Desktop, Claude Code, and Cowork (one MCP endpoint; setup steps differ per surface). Generate, edit, and onboard brands inside any Claude conversation — no API key, no install
+- [FAQ](https://www.trybloom.ai/faq/): Frequently asked questions
+
+## Docs
+
+- [Documentation](https://www.trybloom.ai/docs/api): Full reference for the Bloom REST API, authentication, usage limits, and integration guides
+- [Docs index (llms.txt)](https://www.trybloom.ai/docs/llms.txt): Per-page index of every docs page in Markdown
+- [Docs full text (llms-full.txt)](https://www.trybloom.ai/docs/llms-full.txt): Entire docs site combined into a single file for LLM context
+- [OpenAPI spec](https://www.trybloom.ai/api/v1/spec.json): Live OpenAPI 3.1 spec — always reflects the running API
+
+## API
+
+Base URL: https://www.trybloom.ai/api/v1
+
+Authentication: include your API key in every request via either header:
+- x-api-key: your-api-key
+- Authorization: Bearer your-api-key
+
+Manage API keys at https://www.trybloom.ai/mcp
+
+Response format: `{ "data": ... }` on success, `{ "error": { "code": "...", "message": "..." } }` on error.
+
+Endpoint reference, schemas, and guides: see https://www.trybloom.ai/docs/api — full markdown surface at https://www.trybloom.ai/docs/llms-full.txt.
+
+## MCP Server
+
+Bloom provides an MCP (Model Context Protocol) server for AI clients (Claude, ChatGPT, Cursor, Codex, etc.). Streamable HTTP transport — no local install required.
+
+Endpoint: https://www.trybloom.ai/api/mcp
+
+### Authentication
+
+- OAuth (default): most clients negotiate authentication automatically when given just the endpoint URL — sign in once with your Bloom account through the client's connector flow.
+- API key (fallback): for headless setups or clients that don't yet support OAuth, pass your key as `Authorization: Bearer your-api-key`.
+
+### Setup by client
+
+Claude Code (CLI):
+
+    claude mcp add --transport http bloom https://www.trybloom.ai/api/mcp
+
+Claude Code (.claude/mcp.json):
+
+    {
+      "mcpServers": {
+        "bloom": {
+          "type": "http",
+          "url": "https://www.trybloom.ai/api/mcp"
+        }
+      }
+    }
+
+Claude Desktop / ChatGPT: open Settings → Connectors and paste https://www.trybloom.ai/api/mcp as a custom connector. Sign in with your Bloom account when prompted.
+
+Cursor (.cursor/mcp.json):
+
+    {
+      "mcpServers": {
+        "bloom": {
+          "url": "https://www.trybloom.ai/api/mcp"
+        }
+      }
+    }
+
+VS Code (.vscode/mcp.json):
+
+    {
+      "servers": {
+        "bloom": {
+          "type": "http",
+          "url": "https://www.trybloom.ai/api/mcp"
+        }
+      }
+    }
+
+Codex CLI (~/.codex/config.toml):
+
+    [mcp_servers.bloom]
+    url = "https://www.trybloom.ai/api/mcp"
+
+Then run `codex mcp login bloom` from your terminal to authenticate.
+
+Windsurf (~/.codeium/windsurf/mcp_config.json):
+
+    {
+      "mcpServers": {
+        "bloom": {
+          "serverUrl": "https://www.trybloom.ai/api/mcp"
+        }
+      }
+    }
+
+### API key authentication
+
+For non-OAuth clients or headless setups, add an Authorization header. Example (Cursor — pattern is the same for Claude Code, VS Code, and Windsurf):
+
+    {
+      "mcpServers": {
+        "bloom": {
+          "url": "https://www.trybloom.ai/api/mcp",
+          "headers": { "Authorization": "Bearer your-api-key" }
+        }
+      }
+    }
+
+For Codex CLI, reference an environment variable instead of an inline header:
+
+    [mcp_servers.bloom]
+    url = "https://www.trybloom.ai/api/mcp"
+    bearer_token_env_var = "BLOOM_API_KEY"
+
+### MCP Tools
+
+Images:
+- bloom_generate_image: Generate on-brand images (1–5 variants) or edit an existing image
+- bloom_get_image: Check generation status and retrieve the result
+- bloom_list_images: List images with filtering and pagination
+- bloom_delete_images: Delete one or more images from the library
+- bloom_search_user_images: Semantic search over the brand's image library; returns ranked candidates (id, short URL, AI description) for use as references in bloom_generate_image
+- bloom_resize_image: Resize an image to a different aspect ratio
+- bloom_remove_background: Strip the background from an image and return a transparent PNG
+- bloom_vectorize_image: Convert a raster image to a scalable SVG. Best for logos, icons, and flat illustrations
+- bloom_upload_image: Upload an image by URL for use as reference or edit subject
+- bloom_create_image_upload_url: Mint 1–10 short-lived signed URLs for uploading local image files for use as references or edit subjects when a Bloom API key isn't directly accessible from your shell (e.g. when it lives inside an MCP client's config). Does not change the brand's logo.
+
+Brands:
+- bloom_onboard_brand: Onboard a website or Instagram profile to extract brand identity
+- bloom_get_brand: Get a brand's details and onboarding status
+- bloom_list_brands: List all brands in your account
+- bloom_delete_brand: Delete a brand from your account
+- bloom_update_brand_logo: Update the logo for a brand (URL-based, with HTTP fallback paths for local logo files)
+- bloom_create_logo_upload_url: Mint a short-lived signed URL for replacing a brand's primary logo file (triggers visual DNA re-analysis) when a Bloom API key isn't directly accessible from your shell. For non-logo images, use bloom_create_image_upload_url instead.
+
+Credits:
+- bloom_check_credits: Check your remaining credit balance
+
+## Optional
+
+- [Terms of Service](https://www.trybloom.ai/terms/)
+- [Privacy Policy](https://www.trybloom.ai/privacy/)
+- [Careers](https://www.trybloom.ai/careers/): Open roles at Bloom
+- [Founding Product Engineer](https://www.trybloom.ai/careers/founding-product-engineer/): Engineer #2 at Bloom
+- [Founding Growth / Marketing](https://www.trybloom.ai/careers/founding-growth/): Bloom's first non-engineering hire — own the growth function

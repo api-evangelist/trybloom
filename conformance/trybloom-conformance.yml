@@ -1,0 +1,46 @@
+generated: '2026-07-21'
+method: derived
+source: >-
+  Derived from openapi/trybloom-api-openapi.json (securitySchemes, error
+  responses, pagination parameters), the RFC 8414 metadata at
+  well-known/trybloom-oauth-authorization-server.json, and the documented
+  conventions at https://www.trybloom.ai/docs/api/*. No published compliance /
+  certification program (SOC 2, ISO 27001, etc.) was found, so no Compliance
+  claim is asserted.
+standards:
+  - id: oauth2
+    conforms: true
+    evidence: >-
+      RFC 8414 authorization-server metadata published at
+      /.well-known/oauth-authorization-server; authorization_code,
+      client_credentials and refresh_token grants; PKCE S256
+      (code_challenge_methods_supported) required for public clients.
+  - id: oauth2-dynamic-client-registration
+    conforms: true
+    evidence: >-
+      registration_endpoint https://www.trybloom.ai/api/auth/oauth2/register
+      (RFC 7591), documented in docs/api/authentication.
+  - id: oidc
+    conforms: partial
+    evidence: >-
+      openid scope, userinfo_endpoint, EdDSA id-token signing and claims are
+      advertised in the RFC 8414 metadata, but /.well-known/openid-configuration
+      returns 404 (no OIDC discovery document).
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: 'Errors use a custom {"error": {code, status, message}} envelope, not application/problem+json.'
+  - id: cursor-pagination
+    conforms: true
+    evidence: List endpoints use cursor/limit request parameters and a nextCursor response field; INVALID_CURSOR on bad cursors.
+  - id: idempotency
+    conforms: false
+    evidence: No Idempotency-Key header or equivalent documented in the spec or docs.
+  - id: rfc8414-authorization-server-metadata
+    conforms: true
+    evidence: /.well-known/oauth-authorization-server returns valid RFC 8414 JSON (saved verbatim in well-known/).
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: /.well-known/security.txt returns 404 (probed 2026-07-21).
+  - id: openapi-3-1
+    conforms: true
+    evidence: Live spec at https://www.trybloom.ai/api/v1/spec.json declares openapi 3.1.1 and is generated from the running API.

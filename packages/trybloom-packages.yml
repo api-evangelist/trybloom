@@ -1,0 +1,23 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  npm registry search (registry.npmjs.org) and PyPI probed 2026-07-21; Bloom's
+  docs at https://www.trybloom.ai/docs/api/openapi recommend generating a typed
+  client from the live OpenAPI spec (openapi-typescript / openapi-generator)
+  rather than shipping first-party SDKs. No first-party client libraries were
+  found on npm, PyPI, or a GitHub org (github.com/trybloom returns 404).
+description: >-
+  Bloom publishes no first-party SDKs; the supported integration paths are the
+  REST API (live OpenAPI 3.1 spec for codegen), the hosted MCP server, and
+  workflow tools via plain HTTP. One third-party community SDK exists on npm.
+packages:
+  - language: javascript
+    registry: npm
+    name: "@guru6163/trybloom-sdk"
+    url: https://www.npmjs.com/package/@guru6163/trybloom-sdk
+    install: npm install @guru6163/trybloom-sdk
+    official: false
+    note: Community-published; not affiliated with Bloom.
+codegen:
+  spec: https://www.trybloom.ai/api/v1/spec.json
+  example: npx openapi-typescript https://www.trybloom.ai/api/v1/spec.json -o bloom-api.d.ts

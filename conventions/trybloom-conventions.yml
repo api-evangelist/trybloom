@@ -1,0 +1,86 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  https://www.trybloom.ai/docs/api/index.md,
+  https://www.trybloom.ai/docs/api/authentication.md,
+  https://www.trybloom.ai/docs/api/usage-limits.md,
+  https://www.trybloom.ai/docs/api/openapi.md and
+  https://www.trybloom.ai/llms.txt, cross-checked against
+  openapi/trybloom-api-openapi.json (live spec).
+description: >-
+  Cross-cutting request/response semantics of the Bloom API: authentication
+  style, async job pattern with long-poll wait, cursor pagination, response and
+  error envelopes, rate-limit signaling, and versioning posture.
+
+base_url: https://www.trybloom.ai/api/v1
+api_style: REST over HTTPS, JSON requests and responses
+
+authentication:
+  scheme: >-
+    API key in either x-api-key header or Authorization Bearer (x-api-key wins
+    when both are present); Bloom OAuth access tokens accepted on the same
+    Bearer header.
+  key_prefix: bloom_sk_
+  docs: https://www.trybloom.ai/docs/api/authentication
+  detail: authentication/trybloom-authentication.yml
+
+idempotency:
+  supported: false
+  notes: >-
+    No idempotency-key mechanism is documented and the OpenAPI declares no
+    Idempotency-Key parameter. Writes are asynchronous job submissions (202
+    with ids) rather than idempotent upserts.
+
+async_jobs:
+  pattern: >-
+    Mutating calls (POST /brands, POST /images/generations, edits, resizes,
+    background removal, vectorize) return 202 Accepted immediately with the
+    resource id; the work runs in the background.
+  wait_parameter: >-
+    GET /brands/{id}?wait=true and GET /images/{id}?wait=true hold the
+    connection open until a terminal state (long-poll, no polling loop); a
+    timeout returns the current resource rather than an error. Batch:
+    GET /images?ids=a,b,c&wait=true collects a whole batch in one call.
+  terminal_states:
+    brand: [ready, logo_required, failed]
+    image: [completed, failed]
+
+pagination:
+  style: cursor
+  request_params: [cursor, limit]
+  response_fields: [nextCursor]
+  error: INVALID_CURSOR (400)
+
+response_envelope:
+  success: '{ "data": ... }'
+  error: '{ "error": { "code", "status", "message" } }'
+  detail: errors/trybloom-problem-types.yml
+
+request_tracing:
+  documented: false
+
+versioning:
+  scheme: uri-path (v1)
+  stability: >-
+    "Endpoint shapes are stable — we only add fields, never remove or rename
+    without a versioned migration path" (docs/api/openapi). The spec is
+    generated from the running API, so it always reflects the live contract.
+  detail: lifecycle/trybloom-lifecycle.yml
+
+rate_limits:
+  signaling: 429 with code TOO_MANY_REQUESTS
+  limit: 120 requests/minute per API key (sliding window)
+  detail: rate-limits/trybloom-rate-limits.yml
+
+workspaces:
+  notes: >-
+    Everything is scoped to a workspace; the personal workspace is the default
+    (omit workspaceId). List endpoints span all workspaces unless workspaceId
+    is given. Credits are per-workspace.
+
+credits:
+  notes: >-
+    Generation actions debit workspace credits (2K = 1 credit, 4K = 2 credits;
+    variants multiply). Exhaustion returns 402 INSUFFICIENT_CREDITS with a
+    data.action_url deep link.
+  detail: plans/trybloom-plans-pricing.yml

@@ -1,0 +1,25 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  https://www.trybloom.ai/docs/api/openapi.md (versioning/stability statement);
+  status page, changelog, deprecation policy and SLA probed 2026-07-21:
+  status.trybloom.ai 404, /changelog 404, /docs/changelog 404 — none published.
+versioning:
+  scheme: uri-path
+  current: v1
+  docs: https://www.trybloom.ai/docs/api/openapi
+  notes: >-
+    The OpenAPI spec is generated from the running API ("no drift between docs
+    and runtime"). Published stability contract: endpoint shapes are stable —
+    fields are only added, never removed or renamed without a versioned
+    migration path.
+deprecation:
+  policy_url: null
+  sunset_header: false
+  notes: No public deprecation policy or RFC 8594 Sunset/Deprecation header support documented yet.
+sla:
+  url: null
+  uptime_target: null
+status_page: null
+changelog: null
+deprecated_operations: []

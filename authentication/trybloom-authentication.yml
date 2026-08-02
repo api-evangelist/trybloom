@@ -1,0 +1,58 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/trybloom-api-openapi.json
+docs: https://www.trybloom.ai/docs/api/authentication
+summary:
+  types:
+  - apiKey
+  - http
+  - oauth2
+  api_key_in:
+  - header
+  oauth2_flows:
+  - authorizationCode
+  - clientCredentials
+  - refreshToken
+notes: >-
+  Every request needs a Bloom API key (bloom_sk_...) or a Bloom OAuth access
+  token. The key is accepted in either header; x-api-key wins when both are
+  present. OAuth tokens resolve to the same user identity as an API key (same
+  access to brands, images, credits, plan gates, workspaces). Public clients
+  use Authorization Code + PKCE S256 with dynamic client registration and no
+  client_secret; wildcard redirect URIs are not supported. Keys are generated
+  at https://www.trybloom.ai/settings#api-keys.
+schemes:
+- name: apiKey
+  type: apiKey
+  in: header
+  parameter: x-api-key
+  description: 'Bloom API key, for example `x-api-key: bloom_sk_...`.'
+  sources:
+  - openapi/trybloom-api-openapi.json
+- name: bearer
+  type: http
+  scheme: bearer
+  description: Bloom API key (`Bearer bloom_sk_...`) or Bloom OAuth access token.
+  sources:
+  - openapi/trybloom-api-openapi.json
+- name: Bloom OAuth
+  type: oauth2
+  description: >-
+    App-integration OAuth (not declared in the OpenAPI securitySchemes;
+    documented in docs/api/authentication with RFC 8414 metadata at
+    /.well-known/oauth-authorization-server).
+  issuer: https://www.trybloom.ai/api/auth
+  flows:
+  - flow: authorizationCode
+    authorizationUrl: https://www.trybloom.ai/api/auth/oauth2/authorize
+    tokenUrl: https://www.trybloom.ai/api/auth/oauth2/token
+    pkce: S256
+  - flow: clientCredentials
+    tokenUrl: https://www.trybloom.ai/api/auth/oauth2/token
+  - flow: refreshToken
+    tokenUrl: https://www.trybloom.ai/api/auth/oauth2/token
+  registration: https://www.trybloom.ai/api/auth/oauth2/register
+  scopes: scopes/trybloom-scopes.yml
+  sources:
+  - https://www.trybloom.ai/docs/api/authentication
+  - well-known/trybloom-oauth-authorization-server.json

@@ -1,0 +1,100 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Bloom
+providerId: trybloom
+generated: '2026-07-21'
+method: searched
+created: '2026-07-21'
+modified: '2026-07-21'
+reconciled: true
+tags:
+  - Image Generation
+  - Brand Management
+  - Credits
+description: >-
+  Bloom is credit-priced: every plan grants monthly image credits (2K image =
+  1 credit, 4K = 2 credits; variants multiply the cost) and API + MCP access is
+  included in every paid plan. There is no free plan; new accounts get 10 free
+  credits to try the API. Plan credits refresh monthly on the billing
+  anniversary and do not roll over; one-off top-ups (20-200 credits) never
+  expire. Annual billing is discounted (Scale shows 28% off).
+sources:
+  - https://www.trybloom.ai/pricing/
+  - https://www.trybloom.ai/docs/api/usage-limits
+plans:
+  - id: bloom-plus
+    name: Plus
+    type: subscription
+    description: Entry plan.
+    entries:
+      - label: Monthly price
+        name: price_monthly
+        type: fee
+        metric: month
+        price: $20/mo
+      - label: Monthly image credits
+        name: credits
+        type: quota
+        metric: credits
+        limit: 50
+        timeFrame: month
+  - id: bloom-pro
+    name: Pro
+    type: subscription
+    description: Mid plan.
+    entries:
+      - label: Monthly price
+        name: price_monthly
+        type: fee
+        metric: month
+        price: $35/mo
+      - label: Monthly image credits
+        name: credits
+        type: quota
+        metric: credits
+        limit: 100
+        timeFrame: month
+  - id: bloom-max
+    name: Max
+    type: subscription
+    description: High-volume individual plan (price shown in-app).
+    entries:
+      - label: Monthly image credits
+        name: credits
+        type: quota
+        metric: credits
+        limit: 200
+        timeFrame: month
+  - id: bloom-scale
+    name: Scale
+    type: subscription
+    description: >-
+      Volume pricing for individuals, teams, and agencies: shared workspaces
+      and brand assets, pooled credits, volume discounts, single-invoice
+      billing, unlimited team seats. Credit tiers of 300 / 500 / 1,000 / 2,000
+      per month ($90/mo at the 500-credit tier; 28% off billed annually).
+    entries:
+      - label: Monthly price (500-credit tier)
+        name: price_monthly_500
+        type: fee
+        metric: month
+        price: $90/mo
+      - label: Monthly image credits
+        name: credits
+        type: quota
+        metric: credits
+        limit: 2000
+        timeFrame: month
+        notes: Selectable tiers 300-2,000 credits/month.
+  - id: bloom-topup
+    name: Credit top-up
+    type: one-time
+    description: One-off top-up of 20-200 credits; top-up credits never expire.
+    entries:
+      - label: Top-up credits
+        name: topup_credits
+        type: quota
+        metric: credits
+        limit: 200
+        timeFrame: purchase

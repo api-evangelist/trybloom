@@ -1,0 +1,30 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Bloom
+providerId: trybloom
+generated: '2026-07-21'
+method: searched
+created: '2026-07-21'
+modified: '2026-07-21'
+reconciled: true
+tags:
+  - Rate Limiting
+  - Image Generation
+description: >-
+  Bloom API rate limits are enforced per API key on a sliding window. Limits
+  above the published ceiling are raised on request via support@trybloom.ai
+  for sustained-volume or spiky batch integrations.
+sources:
+  - https://www.trybloom.ai/docs/api/usage-limits
+responseCodes:
+  throttled: 429
+errorCodes:
+  throttled: TOO_MANY_REQUESTS
+limits:
+  - name: Requests per API key
+    scope: api-key
+    metric: requests_per_minute
+    limit: 120
+    timeFrame: minute
+    window: sliding

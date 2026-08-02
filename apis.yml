@@ -1,22 +1,169 @@
 aid: trybloom
-name: Trybloom
-description: Trybloom is a company surfaced as a portfolio company of y-combinator and added to the API
-  Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+name: Bloom
+description: >-
+  Bloom (trybloom.ai) is the brand layer for agents — a Y Combinator
+  (Spring 2026) company founded by Ray Fitzgerald that turns a brand into
+  infrastructure any agent, app, or platform can call. Point Bloom at a
+  website or Instagram profile and it ingests the brand — logo, palette,
+  type, tone, visual DNA — then generates on-brand images (edit, resize,
+  background removal, vectorize to SVG, 2K/4K, variants) through a web app,
+  a credit-priced REST API with a live OpenAPI 3.1 contract, and an official
+  hosted MCP server with OAuth sign-in for Claude, ChatGPT, Cursor, and other
+  agents.
 url: https://raw.githubusercontent.com/api-evangelist/trybloom/refs/heads/main/apis.yml
+accessModel:
+  pricing: paid
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Paid · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://www.trybloom.ai/opengraph-image.png
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - y-combinator
 x-tier: stub
 x-tier-reason: portfolio-lead
+x-enrichment:
+  date: '2026-07-21'
+  status: enriched
+  artifacts_added: 22
+  pass: local-v1
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
 tags:
 - Company
-apis: []
+- Brand Management
+- Image Generation
+- Artificial Intelligence
+- Agents
+- MCP
+- Marketing
+- Creative
+apis:
+- aid: trybloom:trybloom-account-api
+  name: Bloom Account API
+  description: Inspect the authenticated account — profile, credit balance, and accessible workspaces.
+  humanURL: https://www.trybloom.ai/docs/api
+  baseURL: https://www.trybloom.ai/api/v1
+  tags:
+  - Account
+  properties:
+  - type: OpenAPI
+    url: openapi/trybloom-account-api-openapi.yml
+  - type: Documentation
+    url: https://www.trybloom.ai/docs/api
+  - type: APIReference
+    url: https://www.trybloom.ai/docs/api-reference/account/get-account
+  - type: GettingStarted
+    url: https://www.trybloom.ai/docs/api
+- aid: trybloom:trybloom-brands-api
+  name: Bloom Brands API
+  description: Manage brands and brand identity.
+  humanURL: https://www.trybloom.ai/docs/api
+  baseURL: https://www.trybloom.ai/api/v1
+  tags:
+  - Brands
+  properties:
+  - type: OpenAPI
+    url: openapi/trybloom-brands-api-openapi.yml
+  - type: Documentation
+    url: https://www.trybloom.ai/docs/api
+  - type: APIReference
+    url: https://www.trybloom.ai/docs/api-reference/account/get-account
+  - type: GettingStarted
+    url: https://www.trybloom.ai/docs/api
+- aid: trybloom:trybloom-images-api
+  name: Bloom Images API
+  description: Generate, edit, and retrieve images.
+  humanURL: https://www.trybloom.ai/docs/api
+  baseURL: https://www.trybloom.ai/api/v1
+  tags:
+  - Images
+  properties:
+  - type: OpenAPI
+    url: openapi/trybloom-images-api-openapi.yml
+  - type: Documentation
+    url: https://www.trybloom.ai/docs/api
+  - type: APIReference
+    url: https://www.trybloom.ai/docs/api-reference/account/get-account
+  - type: GettingStarted
+    url: https://www.trybloom.ai/docs/api
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+common:
+- type: AgenticAccess
+  url: agentic-access/trybloom-agentic-access.yml
+- type: DomainSecurity
+  url: security/trybloom-domain-security.yml
+- type: Documentation
+  url: https://www.trybloom.ai/docs/api
+- type: APIReference
+  url: https://www.trybloom.ai/docs/api-reference/account/get-account
+- type: GettingStarted
+  url: https://www.trybloom.ai/docs/api
+- type: Pricing
+  url: https://www.trybloom.ai/pricing/
+- type: Login
+  url: https://www.trybloom.ai/auth/sign-in
+- type: TermsOfService
+  url: https://www.trybloom.ai/terms/
+- type: PrivacyPolicy
+  url: https://www.trybloom.ai/privacy/
+- type: Support
+  url: https://discord.gg/rncVAMSQ9f
+  description: Bloom Discord community; email support at support@trybloom.ai.
+- type: FAQ
+  url: https://www.trybloom.ai/faq/
+- type: Careers
+  url: https://www.trybloom.ai/careers/
+- type: LinkedIn
+  url: https://www.linkedin.com/company/trybloomai
+- type: XTwitter
+  url: https://x.com/trybloom
+- type: MCPServer
+  url: mcp/trybloom-mcp.yml
+  name: Bloom MCP Server
+  description: >-
+    Official hosted MCP server at https://www.trybloom.ai/api/mcp (Streamable
+    HTTP; OAuth sign-in or API key) exposing 17 brand/image/credit tools.
+- type: LLMsTxt
+  url: llms/trybloom-llms.txt
+  data:
+    liveURL: https://www.trybloom.ai/llms.txt
+- type: WellKnown
+  url: well-known/trybloom-well-known.yml
+- type: Authentication
+  url: authentication/trybloom-authentication.yml
+- type: OAuthScopes
+  url: scopes/trybloom-scopes.yml
+- type: Conventions
+  url: conventions/trybloom-conventions.yml
+- type: ErrorCatalog
+  url: errors/trybloom-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/trybloom-lifecycle.yml
+- type: Conformance
+  url: conformance/trybloom-conformance.yml
+- type: DataModel
+  url: data-model/trybloom-data-model.yml
+- type: RateLimits
+  url: rate-limits/trybloom-rate-limits.yml
+- type: Plans
+  url: plans/trybloom-plans-pricing.yml
+- type: Packages
+  url: packages/trybloom-packages.yml
+- type: AgentSkill
+  url: skills/_index.yml
+  description: Three packaged Agent Skills grounded in the live OpenAPI operationIds.

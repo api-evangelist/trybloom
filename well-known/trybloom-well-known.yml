@@ -1,0 +1,24 @@
+generated: '2026-07-21'
+method: searched
+description: >-
+  Results of probing the /.well-known/ discovery surface on the Bloom API /
+  website host (https://www.trybloom.ai — the API is served from the same host
+  at /api/v1). Status is the HTTP code observed at fetch time. The RFC 8414
+  OAuth authorization server metadata returned a real JSON document and is
+  saved verbatim; Bloom's docs point OAuth/PKCE clients at this metadata
+  (issuer https://www.trybloom.ai/api/auth with dynamic client registration).
+hosts:
+  - host: https://www.trybloom.ai
+    documents:
+      - path: /.well-known/security.txt
+        status: 404
+      - path: /.well-known/openid-configuration
+        status: 404
+      - path: /.well-known/oauth-authorization-server
+        status: 200
+        type: application/json
+        file: trybloom-oauth-authorization-server.json
+      - path: /.well-known/api-catalog
+        status: 404
+      - path: /.well-known/ai-plugin.json
+        status: 404

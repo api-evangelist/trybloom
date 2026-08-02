@@ -1,0 +1,41 @@
+generated: '2026-07-21'
+method: searched
+source: >-
+  https://www.trybloom.ai/.well-known/oauth-authorization-server (RFC 8414
+  metadata, saved verbatim at well-known/trybloom-oauth-authorization-server.json)
+  and https://www.trybloom.ai/docs/api/authentication.md. The OpenAPI declares
+  apiKey/bearer schemes only, so the scope surface comes from the published
+  OAuth metadata rather than the spec.
+docs: https://www.trybloom.ai/docs/api/authentication
+notes: >-
+  Bloom OAuth is identity-scoped rather than permission-scoped: access tokens
+  resolve to the same user identity as an API key, with the same access to
+  brands, images, credits, plan gates, and workspaces. Public clients use
+  Authorization Code + PKCE (S256) with dynamic client registration (RFC 7591)
+  and no client_secret; wildcard redirect URIs are not supported.
+schemes:
+  - name: Bloom OAuth
+    issuer: https://www.trybloom.ai/api/auth
+    flows:
+      - flow: authorizationCode
+        authorizationUrl: https://www.trybloom.ai/api/auth/oauth2/authorize
+        tokenUrl: https://www.trybloom.ai/api/auth/oauth2/token
+        pkce: S256 required for public clients
+      - flow: clientCredentials
+        tokenUrl: https://www.trybloom.ai/api/auth/oauth2/token
+      - flow: refreshToken
+        tokenUrl: https://www.trybloom.ai/api/auth/oauth2/token
+    registration: https://www.trybloom.ai/api/auth/oauth2/register
+    jwks: https://www.trybloom.ai/api/auth/jwks
+    introspection: https://www.trybloom.ai/api/auth/oauth2/introspect
+    revocation: https://www.trybloom.ai/api/auth/oauth2/revoke
+    userinfo: https://www.trybloom.ai/api/auth/oauth2/userinfo
+scopes:
+  - scope: openid
+    description: OpenID Connect identity scope (advertised in scopes_supported).
+    flows: [authorizationCode]
+    sources: [well-known/trybloom-oauth-authorization-server.json]
+  - scope: offline_access
+    description: Issue a refresh token for long-lived access (advertised in scopes_supported).
+    flows: [authorizationCode]
+    sources: [well-known/trybloom-oauth-authorization-server.json]

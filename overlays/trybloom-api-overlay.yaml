@@ -1,0 +1,39 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Bloom API
+  version: 1.0.0
+extends: openapi/trybloom-api-openapi.json
+x-generated: '2026-07-21'
+x-method: generated
+actions:
+  - target: $.info
+    description: Add catalog identity, contact and enrichment metadata without touching the harvested spec.
+    update:
+      description: >-
+        Bloom is the brand layer for agents: onboard a brand from a website or
+        Instagram URL and every image generated through the API comes back
+        on-brand. Async job model (202 + wait=true long-poll), cursor
+        pagination, credit-based billing, hosted MCP server at
+        https://www.trybloom.ai/api/mcp.
+      contact:
+        name: Bloom Support
+        email: support@trybloom.ai
+        url: https://www.trybloom.ai/docs/api
+      x-apievangelist:
+        provider: trybloom
+        artifacts:
+          conventions: conventions/trybloom-conventions.yml
+          errors: errors/trybloom-problem-types.yml
+          authentication: authentication/trybloom-authentication.yml
+          rate-limits: rate-limits/trybloom-rate-limits.yml
+  - target: $
+    description: Record external documentation for the whole surface.
+    update:
+      externalDocs:
+        description: Bloom API documentation
+        url: https://www.trybloom.ai/docs/api
+  - target: $.paths['/images/generations'].post
+    description: Flag the credit cost and readiness precondition on the marquee operation.
+    update:
+      x-credit-cost: '2K = 1 credit, 4K = 2 credits; variantCount multiplies'
+      x-precondition: Brand status must be "ready" or the call returns 409 BRAND_NOT_READY.
