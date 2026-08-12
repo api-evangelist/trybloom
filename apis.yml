@@ -103,6 +103,8 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Overlay
+  url: overlays/trybloom-api-overlay.yaml
 - type: AgenticAccess
   url: agentic-access/trybloom-agentic-access.yml
 - type: DomainSecurity
