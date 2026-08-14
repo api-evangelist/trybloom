@@ -32,13 +32,13 @@ x-backed-by:
 x-tier: stub
 x-tier-reason: portfolio-lead
 x-enrichment:
-  date: '2026-07-21'
+  date: '2026-08-13'
   status: enriched
-  artifacts_added: 22
+  artifacts_added: 5
   pass: local-v1
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-21'
+modified: '2026-08-13'
 tags:
 - Company
 - Brand Management
@@ -140,6 +140,26 @@ common:
   description: >-
     Official hosted MCP server at https://www.trybloom.ai/api/mcp (Streamable
     HTTP; OAuth sign-in or API key) exposing 17 brand/image/credit tools.
+- type: ToolCrosswalk
+  url: mcp/trybloom-tool-crosswalk.yml
+  description: >-
+    Binds all 17 MCP tools to their backing OpenAPI operationIds — every tool
+    resolves to at least one REST operation; 3 of 23 operations have no tool.
+- type: ChangeLog
+  url: changelog/trybloom-changelog.yml
+  data:
+    liveURL: https://www.trybloom.ai/changelog
+    feedURL: https://www.trybloom.ai/changelog/rss.xml
+  description: >-
+    Changelog page and Atom feed went live between 2026-07-21 and 2026-08-13 but
+    publish zero entries; the API changed in the same window with no entry.
+- type: GitHubOrganization
+  url: https://github.com/trybloomai
+  description: >-
+    Two public repos — bloom-skills (Bloom's own Agent Skill, MIT) and
+    bloom-examples (Resend and n8n workflow templates). No SDK.
+- type: SignUp
+  url: https://www.trybloom.ai/auth/sign-up
 - type: LLMsTxt
   url: llms/trybloom-llms.txt
   data:
@@ -168,4 +188,7 @@ common:
   url: packages/trybloom-packages.yml
 - type: AgentSkill
   url: skills/_index.yml
-  description: Three packaged Agent Skills grounded in the live OpenAPI operationIds.
+  description: >-
+    Bloom's OWN published Agent Skill (github.com/trybloomai/bloom-skills, MIT
+    v0.1.0, saved verbatim) plus three packaged skills grounded in live OpenAPI
+    operationIds.
