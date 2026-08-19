@@ -1,8 +1,8 @@
-openapi: 3.1.1
+openapi: 3.2.0
 info:
-  title: Bloom Account Brands API
+  title: Bloom Brands API
   version: 1.0.0
-  description: Inspect the authenticated account — profile, credit balance, and accessible workspaces.
+  description: Manage brands and brand identity.
 servers:
 - url: https://www.trybloom.ai/api/v1
 security:
@@ -152,6 +152,23 @@ paths:
             application/json:
               schema:
                 oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
                 - type: object
                   properties:
                     defined:
@@ -360,6 +377,23 @@ paths:
             application/json:
               schema:
                 oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
                 - type: object
                   properties:
                     defined:
@@ -692,6 +726,23 @@ paths:
                     defined:
                       const: true
                     code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
                       const: FORBIDDEN
                     status:
                       const: 403
@@ -899,6 +950,23 @@ paths:
                     defined:
                       const: true
                     code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
                       const: FORBIDDEN
                     status:
                       const: 403
@@ -1009,7 +1077,7 @@ paths:
     put:
       operationId: brands.updateLogo
       summary: Update brand logo (url)
-      description: Update the logo for a brand session. Downloads and validates the logo, then starts (or restarts) visual DNA extraction and returns status "analyzing". For image-based onboarding the stitched collage is preserved as the visual identity, so no extraction runs and status "ready" is returned. Common when status is "logo_required", but also works for replacing an existing logo on ready brands.
+      description: Update the logo for a brand session. Downloads and validates the logo, then starts (or restarts) visual DNA extraction and returns status "analyzing". Common when status is "logo_required", but also works for replacing an existing logo on ready brands.
       tags:
       - Brands
       parameters:
@@ -1140,6 +1208,23 @@ paths:
             application/json:
               schema:
                 oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
                 - type: object
                   properties:
                     defined:
@@ -1395,6 +1480,23 @@ paths:
             application/json:
               schema:
                 oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
                 - type: object
                   properties:
                     defined:

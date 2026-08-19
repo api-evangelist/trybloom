@@ -6,7 +6,7 @@ source: >-
   https://www.trybloom.ai/docs/api/usage-limits.md,
   https://www.trybloom.ai/docs/api/openapi.md and
   https://www.trybloom.ai/llms.txt, cross-checked against
-  openapi/trybloom-api-openapi.json (live spec).
+  openapi/_original/trybloom-api-openapi.json (live spec).
 description: >-
   Cross-cutting request/response semantics of the Bloom API: authentication
   style, async job pattern with long-poll wait, cursor pagination, response and

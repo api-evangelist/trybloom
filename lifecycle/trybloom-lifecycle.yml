@@ -1,9 +1,13 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: searched
 source: >-
   https://www.trybloom.ai/docs/api/openapi.md (versioning/stability statement);
-  status page, changelog, deprecation policy and SLA probed 2026-07-21:
-  status.trybloom.ai 404, /changelog 404, /docs/changelog 404 — none published.
+  status page, changelog, deprecation policy and SLA probed 2026-07-21 and
+  re-probed 2026-08-13. status.trybloom.ai still resolves to no deployment
+  (404 DEPLOYMENT_NOT_FOUND from Vercel) and /docs/changelog is still 404, but
+  /changelog now returns 200 — a live but EMPTY changelog surface ("No updates
+  yet.") with an Atom feed carrying zero entries. Captured in
+  changelog/trybloom-changelog.yml.
 versioning:
   scheme: uri-path
   current: v1
@@ -21,5 +25,20 @@ sla:
   url: null
   uptime_target: null
 status_page: null
-changelog: null
+status_page_probe:
+  url: https://status.trybloom.ai
+  status: 404
+  checked: '2026-08-13'
+  note: Hostname resolves but Vercel returns DEPLOYMENT_NOT_FOUND — no status page is published.
+changelog:
+  url: https://www.trybloom.ai/changelog
+  feed: https://www.trybloom.ai/changelog/rss.xml
+  status: 200
+  entry_count: 0
+  artifact: changelog/trybloom-changelog.yml
+  checked: '2026-08-13'
+  note: >-
+    Surface exists (page + Atom feed, both 200) but publishes nothing yet, so it
+    provides no release history for the API. The live OpenAPI did change in the
+    same window (ACCOUNT_BANNED 403 added) with no entry to announce it.
 deprecated_operations: []

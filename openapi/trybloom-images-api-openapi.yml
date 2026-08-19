@@ -1,8 +1,8 @@
-openapi: 3.1.1
+openapi: 3.2.0
 info:
-  title: Bloom Account Images API
+  title: Bloom Images API
   version: 1.0.0
-  description: Inspect the authenticated account — profile, credit balance, and accessible workspaces.
+  description: Generate, edit, and retrieve images.
 servers:
 - url: https://www.trybloom.ai/api/v1
 security:
@@ -320,6 +320,23 @@ paths:
                     defined:
                       const: true
                     code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
                       const: FORBIDDEN
                     status:
                       const: 403
@@ -506,6 +523,23 @@ paths:
             application/json:
               schema:
                 oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
                 - type: object
                   properties:
                     defined:
@@ -782,6 +816,23 @@ paths:
                     defined:
                       const: true
                     code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
                       const: FORBIDDEN
                     status:
                       const: 403
@@ -992,6 +1043,23 @@ paths:
                     defined:
                       const: true
                     code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
                       const: FORBIDDEN
                     status:
                       const: 403
@@ -1139,7 +1207,7 @@ paths:
                   - 2K
                   - 4K
                   default: 2K
-                  description: '"2K" (default, 1 credit) or "4K" (2 credits, Plus/Pro)'
+                  description: '"2K" (default, 1 credit) or "4K" (2 credits)'
                 model:
                   enum:
                   - fast
@@ -1371,6 +1439,23 @@ paths:
                     defined:
                       const: true
                     code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
                       const: FORBIDDEN
                     status:
                       const: 403
@@ -1393,7 +1478,7 @@ paths:
                       const: 403
                     message:
                       type: string
-                      default: 4K generation requires Plus or Pro plan
+                      default: 4K generation isn't included with your current plan
                     data: {}
                   required:
                   - defined
@@ -1608,7 +1693,7 @@ paths:
                   - 2K
                   - 4K
                   default: 2K
-                  description: '"2K" (default, 1 credit) or "4K" (2 credits, Plus/Pro)'
+                  description: '"2K" (default, 1 credit) or "4K" (2 credits)'
                 model:
                   enum:
                   - fast
@@ -1860,6 +1945,23 @@ paths:
                     defined:
                       const: true
                     code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
                       const: FORBIDDEN
                     status:
                       const: 403
@@ -1882,7 +1984,7 @@ paths:
                       const: 403
                     message:
                       type: string
-                      default: 4K generation requires Plus or Pro plan
+                      default: 4K generation isn't included with your current plan
                     data: {}
                   required:
                   - defined
@@ -2338,6 +2440,23 @@ paths:
                     defined:
                       const: true
                     code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
                       const: FORBIDDEN
                     status:
                       const: 403
@@ -2668,6 +2787,23 @@ paths:
             application/json:
               schema:
                 oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
                 - type: object
                   properties:
                     defined:
@@ -3042,6 +3178,23 @@ paths:
                     defined:
                       const: true
                     code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
                       const: FORBIDDEN
                     status:
                       const: 403
@@ -3169,7 +3322,7 @@ paths:
     post:
       operationId: images.upload
       summary: Upload an image (url)
-      description: Upload an image by URL for use as a reference or edit subject. The server downloads, validates, and stores the image. Returns the image ID for use with the generate or edit endpoints via referenceImageIds, or as an edit subject via POST /images/{id}/edit.
+      description: Upload an image by URL for use as a reference or edit subject. The server downloads and validates the image, then reuses an exact match in the brand session or stores a new one. Returns the canonical image ID and whether it already existed.
       tags:
       - Images
       requestBody:
@@ -3186,9 +3339,10 @@ paths:
                 brandSessionId:
                   type: string
                   format: uuid
-                  description: Associate the upload with a brand session
+                  description: Brand session to scope this upload to
               required:
               - imageUrl
+              - brandSessionId
       responses:
         '200':
           description: OK
@@ -3212,12 +3366,16 @@ paths:
                         type: number
                       mimeType:
                         type: string
+                      existing:
+                        type: boolean
+                        description: Whether Bloom reused an exact image already in this brand session
                     required:
                     - id
                     - imageUrl
                     - width
                     - height
                     - mimeType
+                    - existing
                 required:
                 - data
         '400':
@@ -3360,6 +3518,23 @@ paths:
                     defined:
                       const: true
                     code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
                       const: FORBIDDEN
                     status:
                       const: 403
@@ -3470,7 +3645,7 @@ paths:
     post:
       operationId: images.uploadFile
       summary: Upload an image (file)
-      description: Upload raw image bytes (multipart/form-data) for use as a reference or edit subject. Use this when the image is local — for remote URLs, use POST /images/uploads. Returns an image ID and URL usable with the generate or edit endpoints.
+      description: Upload raw image bytes (multipart/form-data) for use as a reference or edit subject. Use this when the image is local — for remote URLs, use POST /images/uploads. Returns the canonical image ID and whether an exact match already existed in the brand session.
       tags:
       - Images
       requestBody:
@@ -3521,12 +3696,16 @@ paths:
                         type: number
                       mimeType:
                         type: string
+                      existing:
+                        type: boolean
+                        description: Whether Bloom reused an exact image already in this brand session
                     required:
                     - id
                     - imageUrl
                     - width
                     - height
                     - mimeType
+                    - existing
                 required:
                 - data
         '400':
@@ -3630,6 +3809,23 @@ paths:
             application/json:
               schema:
                 oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
                 - type: object
                   properties:
                     defined:
@@ -3745,7 +3941,7 @@ paths:
     post:
       operationId: images.uploadFileSigned
       summary: Upload an image (signed)
-      description: Upload raw image bytes (multipart/form-data) using a short-lived, single-use token minted via the bloom_create_image_upload_url MCP tool. The token in the path is the credential — no Authorization header is expected. Same validation/storage pipeline as POST /images/uploads/file. Returns an image ID and URL usable with the generate or edit endpoints.
+      description: Upload raw image bytes (multipart/form-data) using a short-lived, single-use token minted via the bloom_create_image_upload_url MCP tool. The token in the path is the credential — no Authorization header is expected. Uses the same exact-match reuse pipeline as POST /images/uploads/file and returns the canonical image ID.
       tags:
       - Images
       parameters:
@@ -3799,12 +3995,16 @@ paths:
                         type: number
                       mimeType:
                         type: string
+                      existing:
+                        type: boolean
+                        description: Whether Bloom reused an exact image already in this brand session
                     required:
                     - id
                     - imageUrl
                     - width
                     - height
                     - mimeType
+                    - existing
                 required:
                 - data
         '400':
@@ -4098,6 +4298,23 @@ paths:
             application/json:
               schema:
                 oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
                 - type: object
                   properties:
                     defined:

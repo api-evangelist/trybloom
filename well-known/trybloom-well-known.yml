@@ -1,12 +1,15 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: searched
 description: >-
   Results of probing the /.well-known/ discovery surface on the Bloom API /
   website host (https://www.trybloom.ai — the API is served from the same host
-  at /api/v1). Status is the HTTP code observed at fetch time. The RFC 8414
-  OAuth authorization server metadata returned a real JSON document and is
-  saved verbatim; Bloom's docs point OAuth/PKCE clients at this metadata
-  (issuer https://www.trybloom.ai/api/auth with dynamic client registration).
+  at /api/v1). Status is the HTTP code observed at fetch time. Three documents
+  return real JSON and are saved verbatim: the RFC 8414 OAuth authorization
+  server metadata (Bloom's docs point OAuth/PKCE clients at it — issuer
+  https://www.trybloom.ai/api/auth, dynamic client registration), and the two
+  RFC 9728 protected-resource documents, the second of which is named in the
+  WWW-Authenticate challenge the MCP endpoint returns. Everything else 404s;
+  the host answers 404s with an HTML SPA shell, which is recorded as a miss.
 hosts:
   - host: https://www.trybloom.ai
     documents:
@@ -18,7 +21,45 @@ hosts:
         status: 200
         type: application/json
         file: trybloom-oauth-authorization-server.json
+        checked: '2026-08-13'
+        note: Re-fetched 2026-08-13, byte-identical to the 2026-07-21 capture.
+      - path: /.well-known/oauth-protected-resource
+        status: 200
+        type: application/json
+        file: trybloom-oauth-protected-resource.json
+        checked: '2026-08-13'
+        note: >-
+          RFC 9728 protected-resource metadata; resource https://www.trybloom.ai
+          delegating to authorization server https://www.trybloom.ai/api/auth.
+          Not probed in the 2026-07-21 round.
+      - path: /.well-known/oauth-protected-resource/api/mcp
+        status: 200
+        type: application/json
+        file: trybloom-oauth-protected-resource-api-mcp.json
+        checked: '2026-08-13'
+        note: >-
+          The exact resource_metadata URL advertised in the WWW-Authenticate
+          header of the 401 that https://www.trybloom.ai/api/mcp returns to an
+          unauthenticated MCP tools/list. Same body as the root document.
       - path: /.well-known/api-catalog
         status: 404
       - path: /.well-known/ai-plugin.json
         status: 404
+      - path: /.well-known/agent-card.json
+        status: 404
+        checked: '2026-08-13'
+        note: No A2A agent card; the 404 body is the site's HTML shell.
+      - path: /.well-known/agent.json
+        status: 404
+        checked: '2026-08-13'
+        note: Legacy pre-0.3 agent card path — also absent.
+      - path: /.well-known/mcp.json
+        status: 404
+        checked: '2026-08-13'
+  - host: https://trybloom.ai
+    documents:
+      - path: /.well-known/agent-card.json
+        status: 404
+        checked: '2026-08-13'
+        note: Apex host redirects to www; no agent card there either.
+security_txt: false

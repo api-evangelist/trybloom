@@ -1,0 +1,202 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Bloom Brands API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Brands",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List brands",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.trybloom.ai/api/v1/brands",
+            "params": [
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List brand sessions with cursor-based pagination. Use the returned IDs as brandSessionId when generating images."
+        },
+        {
+          "info": {
+            "name": "Create a brand",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.trybloom.ai/api/v1/brands",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Queue brand onboarding for a website or Instagram profile URL. Returns 202 with an analyzing brand after the durable workflow is accepted. Call GET /brands/{id}?wait=true and generate only when status is \"ready\". `collectImages=false` skips background image-library collection, not crawling or visual DNA. Defaults to the caller's personal workspace; pass `workspaceId` to onboard into a team workspace."
+        },
+        {
+          "info": {
+            "name": "Get a brand",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.trybloom.ai/api/v1/brands/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "wait",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "timeout",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get a brand by ID. When status is \"ready\", the brand can generate images. If status is \"logo_required\", provide a logo via PUT /brands/{id}/logo. A failed brand includes public-safe failure details. Use wait=true to hold the connection until ready, logo_required, or failed; a timeout returns the current analyzing resource."
+        },
+        {
+          "info": {
+            "name": "Delete a brand",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://www.trybloom.ai/api/v1/brands/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Delete a brand by ID. Returns the deleted brand's id, name, and owning workspace. Deleting the same brand twice returns 404."
+        },
+        {
+          "info": {
+            "name": "Update brand logo (url)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://www.trybloom.ai/api/v1/brands/:id/logo",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the logo for a brand session. Downloads and validates the logo, then starts (or restarts) visual DNA extraction and returns status \"analyzing\". Common when status is \"logo_required\", but also works for replacing an existing logo on ready brands."
+        },
+        {
+          "info": {
+            "name": "Update brand logo (file)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://www.trybloom.ai/api/v1/brands/:id/logo/file",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Update the logo for a brand by uploading raw bytes (multipart/form-data). Use this when the logo is local — for remote URLs, use PUT /brands/{id}/logo. Validates and processes the file (SVG and AVIF are converted to PNG; transparency gets an optimal background), then starts (or restarts) visual DNA extraction."
+        },
+        {
+          "info": {
+            "name": "Update brand logo (signed)",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://www.trybloom.ai/api/v1/brands/:id/logo/file/signed/:token",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Update the logo for a brand by uploading raw bytes (multipart/form-data) using a short-lived, single-use token minted via the bloom_create_logo_upload_url MCP tool. The token in the path is the credential — no Authorization header is expected. Same validation/storage pipeline as PUT /brands/{id}/logo/file."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -3,7 +3,7 @@ name: Onboard a brand and generate an on-brand image
 description: >-
   Onboard a brand into Bloom from a website or Instagram URL, wait for analysis
   to finish, then generate an on-brand image and retrieve the result.
-api: openapi/trybloom-api-openapi.json
+api: openapi/_original/trybloom-api-openapi.json
 operations: [brands.create, brands.get, images.generate, images.get, credits.get]
 generated: '2026-07-21'
 method: generated

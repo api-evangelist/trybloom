@@ -1,0 +1,178 @@
+specification: API Commons Tool Crosswalk
+specificationVersion: '0.1'
+provider: Bloom
+providerId: trybloom
+generated: '2026-08-13'
+method: derived
+source: >-
+  Derived by binding each tool in mcp/trybloom-mcp.yml (tool names and
+  descriptions captured verbatim from the provider's own
+  https://www.trybloom.ai/llms.txt) to the operationIds in
+  openapi/_original/trybloom-api-openapi.json (live spec re-fetched from
+  https://www.trybloom.ai/api/v1/spec.json on 2026-08-13). Several bindings are
+  stated by Bloom's own reference — the signed-upload endpoints document that
+  their path token is "minted via the bloom_create_image_upload_url /
+  bloom_create_logo_upload_url MCP tool".
+description: >-
+  Bloom ships two agent surfaces over one backend: a 23-operation REST API and a
+  17-tool hosted MCP server. Every MCP tool resolves to at least one REST
+  operation, so a tool's real input schema is that operation's parameters and
+  requestBody. Three REST operations have no tool.
+surfaces:
+  openapi:
+    files:
+      - openapi/trybloom-account-api-openapi.yml
+      - openapi/trybloom-brands-api-openapi.yml
+      - openapi/trybloom-images-api-openapi.yml
+    original: openapi/_original/trybloom-api-openapi.json
+    live: https://www.trybloom.ai/api/v1/spec.json
+    base_url: https://www.trybloom.ai/api/v1
+    gated: false
+  mcp:
+    url: https://www.trybloom.ai/api/mcp
+    transport: streamable-http
+    gated: true
+    note: >-
+      POST tools/list on 2026-08-13 returned HTTP 401 {"error":"unauthorized"}
+      with WWW-Authenticate Bearer resource_metadata=
+      https://www.trybloom.ai/.well-known/oauth-protected-resource/api/mcp.
+      Live inputSchemas therefore require an authenticated introspection; the
+      tool names and descriptions below are the provider's published ones and
+      the parameter shapes are inherited from the bound REST operations.
+  graphql:
+    published: false
+crosswalk:
+  - tool: bloom_generate_image
+    category: images
+    rest: [images.generate, images.edit]
+    binding: one-to-many
+    confidence: high
+    note: >-
+      One tool covers two operations — POST /images/generations for a new
+      generation (1-5 variants) and POST /images/{id}/edit when an existing
+      image id is supplied. Both return 202 with image ids to poll.
+  - tool: bloom_get_image
+    category: images
+    rest: [images.get]
+    binding: one-to-one
+    confidence: high
+    note: GET /images/{id}; supports wait=true long-poll to a terminal status.
+  - tool: bloom_list_images
+    category: images
+    rest: [images.list]
+    binding: one-to-one
+    confidence: high
+  - tool: bloom_delete_images
+    category: images
+    rest: [images.deleteMany, images.delete]
+    binding: one-to-many
+    confidence: high
+    note: DELETE /images (up to 50 ids) or DELETE /images/{id} for a single image.
+  - tool: bloom_search_user_images
+    category: images
+    rest: [images.search]
+    binding: one-to-one
+    confidence: high
+  - tool: bloom_resize_image
+    category: images
+    rest: [images.resize]
+    binding: one-to-one
+    confidence: high
+  - tool: bloom_remove_background
+    category: images
+    rest: [images.removeBackground]
+    binding: one-to-one
+    confidence: high
+  - tool: bloom_vectorize_image
+    category: images
+    rest: [images.vectorize]
+    binding: one-to-one
+    confidence: high
+  - tool: bloom_upload_image
+    category: images
+    rest: [images.upload]
+    binding: one-to-one
+    confidence: high
+    note: URL-based upload (POST /images/uploads). The multipart sibling images.uploadFile has no tool.
+  - tool: bloom_create_image_upload_url
+    category: images
+    rest: [images.uploadFileSigned]
+    binding: mints-credential-for
+    confidence: high
+    note: >-
+      The minting act itself has no public REST operation; the tool returns 1-10
+      short-lived single-use tokens that are redeemed at
+      POST /images/uploads/file/signed/{token}, which Bloom's reference states is
+      fed by this tool. Exists because an MCP client often cannot reach the
+      caller's local filesystem or API key.
+  - tool: bloom_onboard_brand
+    category: brands
+    rest: [brands.create]
+    binding: one-to-one
+    confidence: high
+    note: POST /brands queues onboarding for a website or Instagram URL; returns 202 analyzing.
+  - tool: bloom_get_brand
+    category: brands
+    rest: [brands.get]
+    binding: one-to-one
+    confidence: high
+  - tool: bloom_list_brands
+    category: brands
+    rest: [brands.list]
+    binding: one-to-one
+    confidence: high
+  - tool: bloom_delete_brand
+    category: brands
+    rest: [brands.delete]
+    binding: one-to-one
+    confidence: high
+  - tool: bloom_update_brand_logo
+    category: brands
+    rest: [brands.updateLogo, brands.uploadLogoFile]
+    binding: one-to-many
+    confidence: high
+    note: >-
+      PUT /brands/{id}/logo for a remote URL, PUT /brands/{id}/logo/file for raw
+      bytes — the tool description names the "HTTP fallback paths for local logo
+      files". Either restarts visual DNA extraction.
+  - tool: bloom_create_logo_upload_url
+    category: brands
+    rest: [brands.uploadLogoFileSigned]
+    binding: mints-credential-for
+    confidence: high
+    note: >-
+      Same pattern as bloom_create_image_upload_url; token is redeemed at
+      PUT /brands/{id}/logo/file/signed/{token}.
+  - tool: bloom_check_credits
+    category: account
+    rest: [credits.get]
+    binding: one-to-one
+    confidence: high
+mcp_only: []
+rest_only:
+  - operationId: account.get
+    path: GET /account
+    reason: >-
+      whoami probe for API-key callers; an MCP session is already bound to an
+      identity through OAuth, so no tool exposes it.
+  - operationId: workspaces.list
+    path: GET /workspaces
+    reason: >-
+      No workspace tool is published; MCP callers operate in the personal
+      workspace default. Team-workspace selection is REST-only.
+  - operationId: images.uploadFile
+    path: POST /images/uploads/file
+    reason: >-
+      Direct multipart upload with an API key. The MCP path to the same outcome
+      is bloom_create_image_upload_url plus the signed endpoint.
+coverage:
+  mcp_tools: 17
+  rest_operations: 23
+  tools_bound: 17
+  tools_unbound: 0
+  rest_operations_covered: 20
+  rest_operations_uncovered: 3
+  confidence:
+    high: 17
+    medium: 0
+    low: 0

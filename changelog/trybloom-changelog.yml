@@ -1,0 +1,65 @@
+specification: API Commons ChangeLog
+specificationVersion: '0.1'
+provider: Bloom
+providerId: trybloom
+generated: '2026-08-13'
+method: probed
+source: https://www.trybloom.ai/changelog
+description: >-
+  Bloom launched a public changelog surface — a /changelog page linked from the
+  site footer and an Atom feed at /changelog/rss.xml — between 2026-07-21 (when
+  this repo last probed it and got a 404) and 2026-08-13. The surface is live
+  but EMPTY: the page renders "No updates yet." and the feed carries zero
+  <entry> elements with <updated>1970-01-01T00:00:00.000Z</updated>. There is
+  therefore no dated release history to record for the API, even though the API
+  itself demonstrably changed in that window (see undocumented_changes below).
+changelog:
+  url: https://www.trybloom.ai/changelog
+  feed: https://www.trybloom.ai/changelog/rss.xml
+  feed_format: atom
+  scheme: none-published
+  scope: product
+  api_specific: false
+  entry_count: 0
+  latest_entry: null
+  covers_api_changes: unknown
+entries: []
+x-evidence:
+  - url: https://www.trybloom.ai/changelog
+    http_status: 200
+    content_type: text/html
+    observed: '"What we shipped" heading, "Subscribe via RSS", body text "No updates yet."'
+    fetched: '2026-08-13'
+  - url: https://www.trybloom.ai/changelog/rss.xml
+    http_status: 200
+    content_type: application/atom+xml
+    observed: 'Atom feed titled "Bloom Changelog", zero entries, updated 1970-01-01T00:00:00.000Z'
+    fetched: '2026-08-13'
+  - url: https://www.trybloom.ai/docs/changelog
+    http_status: 404
+    observed: No API-specific changelog under the docs host.
+    fetched: '2026-08-13'
+undocumented_changes:
+  note: >-
+    Observed by diffing the live OpenAPI (https://www.trybloom.ai/api/v1/spec.json)
+    fetched 2026-08-13 against the copy harvested 2026-07-21. These are real API
+    changes that shipped with no changelog entry — recorded here as evidence of
+    what the empty changelog is not telling consumers, not as provider-published
+    release notes.
+  observed:
+    - date_observed: '2026-08-13'
+      change: >-
+        A new error code ACCOUNT_BANNED (HTTP 403, default message "This account
+        has been suspended.") was added to the 403 response of every operation in
+        the spec.
+      breaking: false
+      type: addition
+      evidence: openapi/_original/trybloom-api-openapi.json
+    - date_observed: '2026-08-13'
+      change: Operation surface unchanged — the same 23 operationIds across 19 paths.
+      breaking: false
+      type: none
+related:
+  - lifecycle/trybloom-lifecycle.yml
+  - errors/trybloom-problem-types.yml
+  - openapi/_original/trybloom-api-openapi.json

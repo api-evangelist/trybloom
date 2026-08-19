@@ -1,9 +1,9 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: derived
 format: bloom-error-envelope
 source: >-
   Derived from the 4xx/5xx responses and error-code const/enum values in
-  openapi/trybloom-api-openapi.json (live spec at
+  openapi/_original/trybloom-api-openapi.json (live spec at
   https://www.trybloom.ai/api/v1/spec.json), enriched from the error tables in
   https://www.trybloom.ai/docs/api/index.md,
   https://www.trybloom.ai/docs/api/usage-limits.md and
@@ -42,8 +42,16 @@ problems:
     remediation: Follow data.action_url to top up credits, resume the subscription, or upgrade the plan.
   - status: 403
     title: Forbidden
-    codes: [FORBIDDEN, FEATURE_NOT_ENTITLED]
-    meaning: The key lacks access to the resource, or the plan does not include the feature (e.g. 4K on free credits).
+    codes: [FORBIDDEN, FEATURE_NOT_ENTITLED, ACCOUNT_BANNED]
+    meaning: >-
+      The key lacks access to the resource, or the plan does not include the
+      feature (e.g. 4K on free credits). ACCOUNT_BANNED ("This account has been
+      suspended.") is a terminal account-level 403 added to the live spec
+      between 2026-07-21 and 2026-08-13 and now returned on every operation.
+    remediation: >-
+      FORBIDDEN / FEATURE_NOT_ENTITLED are recoverable by upgrading the plan;
+      ACCOUNT_BANNED is not retryable — stop the run and contact
+      support@trybloom.ai.
   - status: 404
     title: Not Found
     codes: [BRAND_NOT_FOUND, IMAGE_NOT_FOUND, SESSION_NOT_FOUND, WORKSPACE_NOT_FOUND,

@@ -1,20 +1,15 @@
 generated: '2026-07-21'
 method: searched
 status: published
-source: >-
-  https://www.trybloom.ai/docs/mcp/getting-started,
-  https://www.trybloom.ai/docs/mcp/connect and the MCP Server section of
-  https://www.trybloom.ai/llms.txt (tool list captured verbatim from the
-  provider's own llms.txt).
-description: >-
-  Bloom operates an official hosted remote MCP server at
-  https://www.trybloom.ai/api/mcp (Streamable HTTP transport, no local
-  install). Authentication is OAuth by default — clients negotiate a browser
-  sign-in with a Bloom account via the RFC 8414 metadata at
-  /.well-known/oauth-authorization-server — with a static API key
-  (Authorization: Bearer bloom_sk_...) as the headless fallback. Documented
-  clients include Claude (claude.ai / Desktop / Code), ChatGPT, Cursor,
-  VS Code, Codex CLI, and Windsurf. MCP access is included in every paid plan.
+source: https://www.trybloom.ai/docs/mcp/getting-started, https://www.trybloom.ai/docs/mcp/connect and
+  the MCP Server section of https://www.trybloom.ai/llms.txt (tool list captured verbatim from the provider's
+  own llms.txt).
+description: 'Bloom operates an official hosted remote MCP server at https://www.trybloom.ai/api/mcp (Streamable
+  HTTP transport, no local install). Authentication is OAuth by default — clients negotiate a browser
+  sign-in with a Bloom account via the RFC 8414 metadata at /.well-known/oauth-authorization-server —
+  with a static API key (Authorization: Bearer bloom_sk_...) as the headless fallback. Documented clients
+  include Claude (claude.ai / Desktop / Code), ChatGPT, Cursor, VS Code, Codex CLI, and Windsurf. MCP
+  access is included in every paid plan.'
 server:
   name: bloom
   transport: http
@@ -28,46 +23,63 @@ install:
   cursor: '{"mcpServers": {"bloom": {"url": "https://www.trybloom.ai/api/mcp"}}}'
   vscode: '{"servers": {"bloom": {"type": "http", "url": "https://www.trybloom.ai/api/mcp"}}}'
 tools:
-  - name: bloom_generate_image
-    description: Generate on-brand images (1-5 variants) or edit an existing image
-  - name: bloom_get_image
-    description: Check generation status and retrieve the result
-  - name: bloom_list_images
-    description: List images with filtering and pagination
-  - name: bloom_delete_images
-    description: Delete one or more images from the library
-  - name: bloom_search_user_images
-    description: >-
-      Semantic search over the brand's image library; returns ranked candidates
-      (id, short URL, AI description) for use as references in
-      bloom_generate_image
-  - name: bloom_resize_image
-    description: Resize an image to a different aspect ratio
-  - name: bloom_remove_background
-    description: Strip the background from an image and return a transparent PNG
-  - name: bloom_vectorize_image
-    description: Convert a raster image to a scalable SVG. Best for logos, icons, and flat illustrations
-  - name: bloom_upload_image
-    description: Upload an image by URL for use as reference or edit subject
-  - name: bloom_create_image_upload_url
-    description: >-
-      Mint 1-10 short-lived signed URLs for uploading local image files for use
-      as references or edit subjects when a Bloom API key isn't directly
-      accessible from your shell. Does not change the brand's logo.
-  - name: bloom_onboard_brand
-    description: Onboard a website or Instagram profile to extract brand identity
-  - name: bloom_get_brand
-    description: Get a brand's details and onboarding status
-  - name: bloom_list_brands
-    description: List all brands in your account
-  - name: bloom_delete_brand
-    description: Delete a brand from your account
-  - name: bloom_update_brand_logo
-    description: Update the logo for a brand (URL-based, with HTTP fallback paths for local logo files)
-  - name: bloom_create_logo_upload_url
-    description: >-
-      Mint a short-lived signed URL for replacing a brand's primary logo file
-      (triggers visual DNA re-analysis) when a Bloom API key isn't directly
-      accessible from your shell.
-  - name: bloom_check_credits
-    description: Check your remaining credit balance
+- name: bloom_generate_image
+  description: Generate on-brand images (1-5 variants) or edit an existing image
+- name: bloom_get_image
+  description: Check generation status and retrieve the result
+- name: bloom_list_images
+  description: List images with filtering and pagination
+- name: bloom_delete_images
+  description: Delete one or more images from the library
+- name: bloom_search_user_images
+  description: Semantic search over the brand's image library; returns ranked candidates (id, short URL,
+    AI description) for use as references in bloom_generate_image
+- name: bloom_resize_image
+  description: Resize an image to a different aspect ratio
+- name: bloom_remove_background
+  description: Strip the background from an image and return a transparent PNG
+- name: bloom_vectorize_image
+  description: Convert a raster image to a scalable SVG. Best for logos, icons, and flat illustrations
+- name: bloom_upload_image
+  description: Upload an image by URL for use as reference or edit subject
+- name: bloom_create_image_upload_url
+  description: Mint 1-10 short-lived signed URLs for uploading local image files for use as references
+    or edit subjects when a Bloom API key isn't directly accessible from your shell. Does not change the
+    brand's logo.
+- name: bloom_onboard_brand
+  description: Onboard a website or Instagram profile to extract brand identity
+- name: bloom_get_brand
+  description: Get a brand's details and onboarding status
+- name: bloom_list_brands
+  description: List all brands in your account
+- name: bloom_delete_brand
+  description: Delete a brand from your account
+- name: bloom_update_brand_logo
+  description: Update the logo for a brand (URL-based, with HTTP fallback paths for local logo files)
+- name: bloom_create_logo_upload_url
+  description: Mint a short-lived signed URL for replacing a brand's primary logo file (triggers visual
+    DNA re-analysis) when a Bloom API key isn't directly accessible from your shell.
+- name: bloom_check_credits
+  description: Check your remaining credit balance
+deployment:
+  mode: remote
+  endpoint: https://www.trybloom.ai/api/mcp
+  install: null
+  package: null
+  auth: oauth
+  verified: probed
+  probe: gated
+  checked: '2026-08-13'
+  source: >-
+    Re-probed 2026-08-13: POST tools/list (Accept application/json,
+    text/event-stream) returned HTTP 401 {"error":"unauthorized"} with
+    WWW-Authenticate: Bearer resource_metadata="https://www.trybloom.ai/.well-known/oauth-protected-resource/api/mcp".
+    That is a live remote MCP endpoint enforcing OAuth, not a stdio package —
+    there is nothing to npx install. The RFC 9728 document it names is saved at
+    well-known/trybloom-oauth-protected-resource-api-mcp.json.
+  live_schemas: >-
+    Gated. Tool inputSchemas require an authenticated introspection; the tools
+    listed above are the provider's published names/descriptions from
+    https://www.trybloom.ai/llms.txt, and their real parameter shapes are bound
+    to OpenAPI operations in mcp/trybloom-tool-crosswalk.yml.
+crosswalk: mcp/trybloom-tool-crosswalk.yml

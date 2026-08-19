@@ -1,6 +1,6 @@
 generated: '2026-07-21'
 method: searched
-source: openapi/trybloom-api-openapi.json
+source: openapi/_original/trybloom-api-openapi.json
 docs: https://www.trybloom.ai/docs/api/authentication
 summary:
   types:
@@ -28,13 +28,13 @@ schemes:
   parameter: x-api-key
   description: 'Bloom API key, for example `x-api-key: bloom_sk_...`.'
   sources:
-  - openapi/trybloom-api-openapi.json
+  - openapi/_original/trybloom-api-openapi.json
 - name: bearer
   type: http
   scheme: bearer
   description: Bloom API key (`Bearer bloom_sk_...`) or Bloom OAuth access token.
   sources:
-  - openapi/trybloom-api-openapi.json
+  - openapi/_original/trybloom-api-openapi.json
 - name: Bloom OAuth
   type: oauth2
   description: >-

@@ -3,7 +3,7 @@ name: Edit and adapt an image
 description: >-
   Edit an existing Bloom image, resize it for another channel, remove its
   background, or vectorize it to SVG — each producing a new image to poll.
-api: openapi/trybloom-api-openapi.json
+api: openapi/_original/trybloom-api-openapi.json
 operations: [images.edit, images.resize, images.removeBackground, images.vectorize, images.get, images.list]
 generated: '2026-07-21'
 method: generated

@@ -3,7 +3,7 @@ name: Reference-driven generation from the brand library
 description: >-
   Upload reference images or find them in the brand's library with semantic
   search, then generate an on-brand image steered by those references.
-api: openapi/trybloom-api-openapi.json
+api: openapi/_original/trybloom-api-openapi.json
 operations: [images.upload, images.search, images.generate, images.get]
 generated: '2026-07-21'
 method: generated

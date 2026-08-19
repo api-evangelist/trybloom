@@ -1,7 +1,7 @@
 generated: '2026-07-21'
 method: derived
 source: >-
-  Derived from openapi/trybloom-api-openapi.json (securitySchemes, error
+  Derived from openapi/_original/trybloom-api-openapi.json (securitySchemes, error
   responses, pagination parameters), the RFC 8414 metadata at
   well-known/trybloom-oauth-authorization-server.json, and the documented
   conventions at https://www.trybloom.ai/docs/api/*. No published compliance /

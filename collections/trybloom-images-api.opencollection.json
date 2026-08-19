@@ -1,0 +1,349 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Bloom Images API",
+    "version": "1.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Images",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List images",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.trybloom.ai/api/v1/images",
+            "params": [
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "workspaceId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "brandSessionId",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "source",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "actionType",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "includeUrls",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "wait",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "timeout",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "List images scoped to a brand or across all brands, with cursor-based pagination. Supports filtering by status and action type. Returns short redirect URLs (/img/{id}) for completed images by default. When `ids` is provided, pass `wait=true` to hold the connection until every referenced image reaches a terminal status (use this to collect results from a fire-and-forget batch of generations)."
+        },
+        {
+          "info": {
+            "name": "Delete images",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://www.trybloom.ai/api/v1/images",
+            "params": [
+              {
+                "name": "ids",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Delete up to 50 images by id in one call."
+        },
+        {
+          "info": {
+            "name": "Get an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://www.trybloom.ai/api/v1/images/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "wait",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "timeout",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Get an image by ID. Use this to poll for generation results. When status is \"completed\", imageUrl contains a short redirect URL (/img/{id}). Use wait=true to hold the connection until a terminal status is reached. When status is \"failed\" and failureReason is \"content_safety\", the prompt was blocked by the provider's content filter — retry with model \"standard\" (more permissive) or revise the prompt."
+        },
+        {
+          "info": {
+            "name": "Delete an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://www.trybloom.ai/api/v1/images/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Delete a single image by ID (generated, uploaded, or scraped). Returns the deleted image's id, source, and owning workspace. Deleting the same image twice returns 404."
+        },
+        {
+          "info": {
+            "name": "Generate an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.trybloom.ai/api/v1/images/generations",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Start an image generation. Returns immediately with the image ID(s). Poll GET /images/{id} to check status and retrieve the result. Optionally include referenceImageIds for style/content guidance."
+        },
+        {
+          "info": {
+            "name": "Edit an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.trybloom.ai/api/v1/images/:id/edit",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Edit a previously generated or uploaded image. The prompt describes what to change. Aspect ratio is locked to the original image's ratio. Optionally include referenceImageIds for additional context. Returns immediately with a new image ID. Poll GET /images/{id} to check status and retrieve the result."
+        },
+        {
+          "info": {
+            "name": "Resize an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.trybloom.ai/api/v1/images/:id/resize",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Resize a completed image to a different aspect ratio. Returns immediately with a new image ID. Poll GET /images/{id} to check status and retrieve the result."
+        },
+        {
+          "info": {
+            "name": "Remove the background from an image",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.trybloom.ai/api/v1/images/:id/remove-background",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Strip the background from an image and return a transparent PNG. Works on generated images (must be completed) and uploaded/scraped images. Returns immediately with a new image ID; the cutout typically completes in under 10 seconds. Poll GET /images/{id} to check status and retrieve the result."
+        },
+        {
+          "info": {
+            "name": "Vectorize an image to SVG",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.trybloom.ai/api/v1/images/:id/vectorize",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Vectorize a raster image to SVG. Works on completed generated images and on uploaded/scraped images. Best for logos, icons, and flat artwork; photos give poor results. Returns immediately with a new image ID. Poll GET /images/{id} to check status and retrieve the result."
+        },
+        {
+          "info": {
+            "name": "Upload an image (url)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.trybloom.ai/api/v1/images/uploads",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Upload an image by URL for use as a reference or edit subject. The server downloads and validates the image, then reuses an exact match in the brand session or stores a new one. Returns the canonical image ID and whether it already existed."
+        },
+        {
+          "info": {
+            "name": "Upload an image (file)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.trybloom.ai/api/v1/images/uploads/file",
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                },
+                {
+                  "name": "brandSessionId",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Upload raw image bytes (multipart/form-data) for use as a reference or edit subject. Use this when the image is local — for remote URLs, use POST /images/uploads. Returns the canonical image ID and whether an exact match already existed in the brand session."
+        },
+        {
+          "info": {
+            "name": "Upload an image (signed)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.trybloom.ai/api/v1/images/uploads/file/signed/:token",
+            "params": [
+              {
+                "name": "token",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "multipart-form",
+              "data": [
+                {
+                  "name": "file",
+                  "type": "text",
+                  "value": ""
+                }
+              ]
+            }
+          },
+          "docs": "Upload raw image bytes (multipart/form-data) using a short-lived, single-use token minted via the bloom_create_image_upload_url MCP tool. The token in the path is the credential — no Authorization header is expected. Uses the same exact-match reuse pipeline as POST /images/uploads/file and returns the canonical image ID."
+        },
+        {
+          "info": {
+            "name": "Semantic Search",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://www.trybloom.ai/api/v1/images/search",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Semantic search (powered by vector embeddings) over the brand session's library images, ranked nearest-first. Library images are those whose `source` is `uploaded` (added by the user) or `scraped` (pulled in during onboarding) — generated images are excluded. Pass `cursor` from the previous response to paginate."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

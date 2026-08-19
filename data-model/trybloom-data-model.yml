@@ -1,7 +1,7 @@
 generated: '2026-07-21'
 method: derived
 source: >-
-  Derived from openapi/trybloom-api-openapi.json (paths, parameters and inline
+  Derived from openapi/_original/trybloom-api-openapi.json (paths, parameters and inline
   response schemas — the spec inlines schemas rather than using
   components.schemas $refs) and the object semantics documented at
   https://www.trybloom.ai/docs/api and https://www.trybloom.ai/docs/llms.txt.

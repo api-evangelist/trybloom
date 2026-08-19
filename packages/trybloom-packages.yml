@@ -1,15 +1,22 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: searched
 source: >-
-  npm registry search (registry.npmjs.org) and PyPI probed 2026-07-21; Bloom's
-  docs at https://www.trybloom.ai/docs/api/openapi recommend generating a typed
-  client from the live OpenAPI spec (openapi-typescript / openapi-generator)
-  rather than shipping first-party SDKs. No first-party client libraries were
-  found on npm, PyPI, or a GitHub org (github.com/trybloom returns 404).
+  npm registry (registry.npmjs.org search + package metadata) and PyPI probed
+  2026-07-21 and re-probed 2026-08-13; Bloom's docs at
+  https://www.trybloom.ai/docs/api/openapi recommend generating a typed client
+  from the live OpenAPI spec (openapi-typescript / openapi-generator) rather
+  than shipping first-party SDKs. Bloom's GitHub org is
+  https://github.com/trybloomai (2 public repos, found 2026-08-13 — the
+  2026-07-21 round looked at github.com/trybloom, which 404s) and it publishes
+  no client library there either: the repos hold an Agent Skill and workflow
+  templates, not an SDK.
 description: >-
-  Bloom publishes no first-party SDKs; the supported integration paths are the
-  REST API (live OpenAPI 3.1 spec for codegen), the hosted MCP server, and
-  workflow tools via plain HTTP. One third-party community SDK exists on npm.
+  Bloom publishes NO first-party SDK on any package registry. The supported
+  integration paths are the REST API (live OpenAPI 3.1 spec for codegen), the
+  hosted MCP server, and workflow tools over plain HTTP. One third-party
+  community SDK exists on npm. Bloom's own distributed artifacts are an Agent
+  Skill (GitHub repo + ZIP release, no registry) and copy-ready templates.
+official_sdk_count: 0
 packages:
   - language: javascript
     registry: npm
@@ -17,7 +24,54 @@ packages:
     url: https://www.npmjs.com/package/@guru6163/trybloom-sdk
     install: npm install @guru6163/trybloom-sdk
     official: false
-    note: Community-published; not affiliated with Bloom.
+    version: 0.2.0
+    published: '2026-05-10'
+    note: >-
+      Community-published, not affiliated with Bloom. Read from
+      registry.npmjs.org on 2026-08-13 (versions 0.1.0, 0.2.0). Predates the
+      ACCOUNT_BANNED error code and any spec change after 2026-05-10, so it
+      cannot be assumed current against the live contract.
+  - language: markdown
+    registry: github
+    name: trybloomai/bloom-skills
+    url: https://github.com/trybloomai/bloom-skills
+    install: npx skills add trybloomai/bloom-skills --skill bloom --global
+    official: true
+    kind: agent-skill
+    version: 0.1.0
+    published: '2026-06-05'
+    note: >-
+      NOT an SDK — Bloom's own Agent Skill for MCP clients, saved in this repo
+      at skills/trybloom-bloom-provider-skill.md. Distributed from GitHub and as
+      a ZIP release
+      (https://github.com/trybloomai/bloom-skills/releases/latest/download/bloom.skill.zip),
+      with no package registry entry; version and date read from the repo's
+      CHANGELOG.md (0.1.0 — 2026-06-05) rather than a registry metadata
+      endpoint. The install command is the third-party `skills` CLI, not a Bloom
+      binary.
+  - language: typescript
+    registry: github
+    name: trybloomai/bloom-examples
+    url: https://github.com/trybloomai/bloom-examples
+    install: npx degit trybloomai/bloom-examples/<template-name> <your-folder-name>
+    official: true
+    kind: templates
+    version: null
+    published: null
+    note: >-
+      NOT an SDK and not versioned — copy-ready workflow templates
+      (resend-dynamic-email, n8n-content-repurposing) distributed by degit off
+      the default branch, so a consumer cannot pin what they get. No registry
+      entry and no tags/releases; last push 2026-06-12. Version recorded as null
+      because the distribution is unpinned, not because it was not checked.
+absent:
+  - registry: npm
+    checked: '2026-08-13'
+    note: No @trybloom / @bloom scope and no first-party package. The unrelated `bloom-mcp` package belongs to Bloom Identity (github.com/bloom-identity), a different company.
+  - registry: pypi
+    checked: '2026-07-21'
+  - registry: rubygems
+    checked: '2026-07-21'
 codegen:
   spec: https://www.trybloom.ai/api/v1/spec.json
   example: npx openapi-typescript https://www.trybloom.ai/api/v1/spec.json -o bloom-api.d.ts

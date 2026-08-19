@@ -1,4 +1,4 @@
-openapi: 3.1.1
+openapi: 3.2.0
 info:
   title: Bloom Account API
   version: 1.0.0
@@ -86,6 +86,23 @@ paths:
             application/json:
               schema:
                 oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
                 - type: object
                   properties:
                     defined:
@@ -239,6 +256,23 @@ paths:
             application/json:
               schema:
                 oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
                 - type: object
                   properties:
                     defined:
@@ -473,6 +507,23 @@ paths:
             application/json:
               schema:
                 oneOf:
+                - type: object
+                  properties:
+                    defined:
+                      const: true
+                    code:
+                      const: ACCOUNT_BANNED
+                    status:
+                      const: 403
+                    message:
+                      type: string
+                      default: This account has been suspended.
+                    data: {}
+                  required:
+                  - defined
+                  - code
+                  - status
+                  - message
                 - type: object
                   properties:
                     defined:

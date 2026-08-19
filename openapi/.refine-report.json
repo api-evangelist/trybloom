@@ -13,6 +13,11 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
+  "notes": [
+    "trybloom-account-api-openapi.yml: upgraded openapi 3.1.1 -> OpenAPI 3.2.0",
+    "trybloom-brands-api-openapi.yml: upgraded openapi 3.1.1 -> OpenAPI 3.2.0",
+    "trybloom-images-api-openapi.yml: upgraded openapi 3.1.1 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
   "skipped": []
 }

@@ -1,21 +1,48 @@
-generated: '2026-07-21'
-method: generated
+generated: '2026-08-13'
+method: searched
 source: >-
-  Packaged Agent Skills generated from openapi/trybloom-api-openapi.json (live
-  spec at https://www.trybloom.ai/api/v1/spec.json) and the Bloom docs guides
-  (docs/api, docs/mcp). Every step is grounded in an operationId verified
-  verbatim in the spec; cross-cutting rules cite ../conventions/, ../errors/
-  and ../authentication/.
+  Bloom publishes its OWN Agent Skill at
+  https://github.com/trybloomai/bloom-skills (skills/bloom/SKILL.md, MIT,
+  v0.1.0 released 2026-06-05, also distributed as a ZIP release and via
+  skills.sh) — saved verbatim as trybloom-bloom-provider-skill.md on
+  2026-08-13. The three API-grounded skills alongside it were generated from
+  openapi/_original/trybloom-api-openapi.json (live spec at
+  https://www.trybloom.ai/api/v1/spec.json) and the Bloom docs guides
+  (docs/api, docs/mcp); every step is grounded in an operationId verified
+  verbatim in the spec, and cross-cutting rules cite ../conventions/,
+  ../errors/ and ../authentication/.
 skills:
+  - file: trybloom-bloom-provider-skill.md
+    name: bloom — how to prompt Bloom
+    method: searched
+    official: true
+    source: https://github.com/trybloomai/bloom-skills/blob/main/skills/bloom/SKILL.md
+    version: 0.1.0
+    license: MIT
+    released: '2026-06-05'
+    install: npx skills add trybloomai/bloom-skills --skill bloom --global
+    zip: https://github.com/trybloomai/bloom-skills/releases/latest/download/bloom.skill.zip
+    surface: mcp
+    api: https://www.trybloom.ai/api/mcp
+    note: >-
+      Bloom's own skill. Prompting/composition guidance for the MCP surface
+      (subject + composition, never name the palette; search the library for
+      references before generating) rather than REST operation choreography —
+      it pairs with, and does not replace, the operationId-grounded skills
+      below. Provider-stated clients: Claude Code, Codex, Cursor, Windsurf,
+      OpenCode, Claude Desktop/Web/Cowork.
   - file: trybloom-onboard-brand-and-generate.md
+    method: generated
     name: Onboard a brand and generate an on-brand image
-    api: openapi/trybloom-api-openapi.json
+    api: openapi/_original/trybloom-api-openapi.json
     operations: [brands.create, brands.get, images.generate, images.get, credits.get]
   - file: trybloom-edit-and-adapt-image.md
+    method: generated
     name: Edit and adapt an image
-    api: openapi/trybloom-api-openapi.json
+    api: openapi/_original/trybloom-api-openapi.json
     operations: [images.edit, images.resize, images.removeBackground, images.vectorize, images.get, images.list]
   - file: trybloom-reference-driven-generation.md
+    method: generated
     name: Reference-driven generation from the brand library
-    api: openapi/trybloom-api-openapi.json
+    api: openapi/_original/trybloom-api-openapi.json
     operations: [images.upload, images.search, images.generate, images.get]

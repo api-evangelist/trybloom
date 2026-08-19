@@ -11,7 +11,7 @@
   "tags": [
     {
       "name": "Account",
-      "description": "Inspect the authenticated account \u2014 profile, credit balance, and accessible workspaces."
+      "description": "Inspect the authenticated account — profile, credit balance, and accessible workspaces."
     },
     {
       "name": "Brands",
@@ -166,6 +166,31 @@
                           "const": true
                         },
                         "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
                           "const": "FORBIDDEN"
                         },
                         "status": {
@@ -304,7 +329,7 @@
               "minimum": 1,
               "maximum": 100,
               "default": 50,
-              "description": "Results per page (1\u2013100, default 50)"
+              "description": "Results per page (1–100, default 50)"
             },
             "allowEmptyValue": true,
             "allowReserved": true
@@ -482,6 +507,31 @@
               "application/json": {
                 "schema": {
                   "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
                     {
                       "type": "object",
                       "properties": {
@@ -798,6 +848,31 @@
               "application/json": {
                 "schema": {
                   "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
                     {
                       "type": "object",
                       "properties": {
@@ -1313,6 +1388,31 @@
                           "const": true
                         },
                         "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
                           "const": "FORBIDDEN"
                         },
                         "status": {
@@ -1633,6 +1733,31 @@
                           "const": true
                         },
                         "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
                           "const": "FORBIDDEN"
                         },
                         "status": {
@@ -1807,7 +1932,7 @@
       "put": {
         "operationId": "brands.updateLogo",
         "summary": "Update brand logo (url)",
-        "description": "Update the logo for a brand session. Downloads and validates the logo, then starts (or restarts) visual DNA extraction and returns status \"analyzing\". For image-based onboarding the stitched collage is preserved as the visual identity, so no extraction runs and status \"ready\" is returned. Common when status is \"logo_required\", but also works for replacing an existing logo on ready brands.",
+        "description": "Update the logo for a brand session. Downloads and validates the logo, then starts (or restarts) visual DNA extraction and returns status \"analyzing\". Common when status is \"logo_required\", but also works for replacing an existing logo on ready brands.",
         "tags": [
           "Brands"
         ],
@@ -2011,6 +2136,31 @@
                           "const": true
                         },
                         "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
                           "const": "FORBIDDEN"
                         },
                         "status": {
@@ -2185,7 +2335,7 @@
       "put": {
         "operationId": "brands.uploadLogoFile",
         "summary": "Update brand logo (file)",
-        "description": "Update the logo for a brand by uploading raw bytes (multipart/form-data). Use this when the logo is local \u2014 for remote URLs, use PUT /brands/{id}/logo. Validates and processes the file (SVG and AVIF are converted to PNG; transparency gets an optimal background), then starts (or restarts) visual DNA extraction.",
+        "description": "Update the logo for a brand by uploading raw bytes (multipart/form-data). Use this when the logo is local — for remote URLs, use PUT /brands/{id}/logo. Validates and processes the file (SVG and AVIF are converted to PNG; transparency gets an optimal background), then starts (or restarts) visual DNA extraction.",
         "tags": [
           "Brands"
         ],
@@ -2409,6 +2559,31 @@
                           "const": true
                         },
                         "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
                           "const": "FORBIDDEN"
                         },
                         "status": {
@@ -2583,7 +2758,7 @@
       "put": {
         "operationId": "brands.uploadLogoFileSigned",
         "summary": "Update brand logo (signed)",
-        "description": "Update the logo for a brand by uploading raw bytes (multipart/form-data) using a short-lived, single-use token minted via the bloom_create_logo_upload_url MCP tool. The token in the path is the credential \u2014 no Authorization header is expected. Same validation/storage pipeline as PUT /brands/{id}/logo/file.",
+        "description": "Update the logo for a brand by uploading raw bytes (multipart/form-data) using a short-lived, single-use token minted via the bloom_create_logo_upload_url MCP tool. The token in the path is the credential — no Authorization header is expected. Same validation/storage pipeline as PUT /brands/{id}/logo/file.",
         "tags": [
           "Brands"
         ],
@@ -2916,7 +3091,7 @@
               "minimum": 1,
               "maximum": 100,
               "default": 50,
-              "description": "Results per page (1\u2013100, default 50)"
+              "description": "Results per page (1–100, default 50)"
             },
             "allowEmptyValue": true,
             "allowReserved": true
@@ -2957,7 +3132,7 @@
                 "completed",
                 "failed"
               ],
-              "description": "Filter by generation status (only applies to generated images \u2014 uploaded/scraped images are excluded when this filter is active)"
+              "description": "Filter by generation status (only applies to generated images — uploaded/scraped images are excluded when this filter is active)"
             },
             "style": "deepObject",
             "explode": true,
@@ -2977,7 +3152,7 @@
                 "remove-background",
                 "vectorize"
               ],
-              "description": "Filter by action type (only applies to generated images \u2014 uploaded/scraped images are excluded when this filter is active)"
+              "description": "Filter by action type (only applies to generated images — uploaded/scraped images are excluded when this filter is active)"
             },
             "style": "deepObject",
             "explode": true,
@@ -3344,6 +3519,31 @@
                           "const": true
                         },
                         "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
                           "const": "FORBIDDEN"
                         },
                         "status": {
@@ -3548,7 +3748,7 @@
                           "type": "integer",
                           "minimum": -9007199254740991,
                           "maximum": 9007199254740991,
-                          "description": "How many images were deleted. May be lower than the number of ids passed \u2014 ids that aren't yours or were already deleted are skipped, not errored."
+                          "description": "How many images were deleted. May be lower than the number of ids passed — ids that aren't yours or were already deleted are skipped, not errored."
                         }
                       },
                       "required": [
@@ -3629,6 +3829,31 @@
               "application/json": {
                 "schema": {
                   "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
                     {
                       "type": "object",
                       "properties": {
@@ -3750,7 +3975,7 @@
       "get": {
         "operationId": "images.get",
         "summary": "Get an image",
-        "description": "Get an image by ID. Use this to poll for generation results. When status is \"completed\", imageUrl contains a short redirect URL (/img/{id}). Use wait=true to hold the connection until a terminal status is reached. When status is \"failed\" and failureReason is \"content_safety\", the prompt was blocked by the provider's content filter \u2014 retry with model \"standard\" (more permissive) or revise the prompt.",
+        "description": "Get an image by ID. Use this to poll for generation results. When status is \"completed\", imageUrl contains a short redirect URL (/img/{id}). Use wait=true to hold the connection until a terminal status is reached. When status is \"failed\" and failureReason is \"content_safety\", the prompt was blocked by the provider's content filter — retry with model \"standard\" (more permissive) or revise the prompt.",
         "tags": [
           "Images"
         ],
@@ -3762,7 +3987,7 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "description": "Image ID \u2014 works for generated, uploaded, and scraped images"
+              "description": "Image ID — works for generated, uploaded, and scraped images"
             }
           },
           {
@@ -4074,6 +4299,31 @@
                           "const": true
                         },
                         "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
                           "const": "FORBIDDEN"
                         },
                         "status": {
@@ -4258,7 +4508,7 @@
             "schema": {
               "type": "string",
               "format": "uuid",
-              "description": "Image ID \u2014 works for generated, uploaded, and scraped images"
+              "description": "Image ID — works for generated, uploaded, and scraped images"
             }
           }
         ],
@@ -4391,6 +4641,31 @@
               "application/json": {
                 "schema": {
                   "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
                     {
                       "type": "object",
                       "properties": {
@@ -4587,7 +4862,7 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 2000,
-                    "description": "Description of the image to generate (1\u20132000 chars)"
+                    "description": "Description of the image to generate (1–2000 chars)"
                   },
                   "brandSessionId": {
                     "type": "string",
@@ -4615,7 +4890,7 @@
                       "4K"
                     ],
                     "default": "2K",
-                    "description": "\"2K\" (default, 1 credit) or \"4K\" (2 credits, Plus/Pro)"
+                    "description": "\"2K\" (default, 1 credit) or \"4K\" (2 credits)"
                   },
                   "model": {
                     "enum": [
@@ -4900,7 +5175,7 @@
                         },
                         "message": {
                           "type": "string",
-                          "default": "Subscription paused \u2014 complete payment to resume"
+                          "default": "Subscription paused — complete payment to resume"
                         },
                         "data": {
                           "type": "object",
@@ -4966,6 +5241,31 @@
                           "const": true
                         },
                         "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
                           "const": "FORBIDDEN"
                         },
                         "status": {
@@ -4998,7 +5298,7 @@
                         },
                         "message": {
                           "type": "string",
-                          "default": "4K generation requires Plus or Pro plan"
+                          "default": "4K generation isn't included with your current plan"
                         },
                         "data": {}
                       },
@@ -5312,7 +5612,7 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 2000,
-                    "description": "What to change \u2014 describe the edit (e.g. \"make the background blue\"). Aspect ratio is locked to the original image's ratio."
+                    "description": "What to change — describe the edit (e.g. \"make the background blue\"). Aspect ratio is locked to the original image's ratio."
                   },
                   "brandSessionId": {
                     "type": "string",
@@ -5325,7 +5625,7 @@
                       "4K"
                     ],
                     "default": "2K",
-                    "description": "\"2K\" (default, 1 credit) or \"4K\" (2 credits, Plus/Pro)"
+                    "description": "\"2K\" (default, 1 credit) or \"4K\" (2 credits)"
                   },
                   "model": {
                     "enum": [
@@ -5638,7 +5938,7 @@
                         },
                         "message": {
                           "type": "string",
-                          "default": "Subscription paused \u2014 complete payment to resume"
+                          "default": "Subscription paused — complete payment to resume"
                         },
                         "data": {
                           "type": "object",
@@ -5704,6 +6004,31 @@
                           "const": true
                         },
                         "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
                           "const": "FORBIDDEN"
                         },
                         "status": {
@@ -5736,7 +6061,7 @@
                         },
                         "message": {
                           "type": "string",
-                          "default": "4K generation requires Plus or Pro plan"
+                          "default": "4K generation isn't included with your current plan"
                         },
                         "data": {}
                       },
@@ -6360,7 +6685,7 @@
                         },
                         "message": {
                           "type": "string",
-                          "default": "Subscription paused \u2014 complete payment to resume"
+                          "default": "Subscription paused — complete payment to resume"
                         },
                         "data": {
                           "type": "object",
@@ -6419,6 +6744,31 @@
               "application/json": {
                 "schema": {
                   "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
                     {
                       "type": "object",
                       "properties": {
@@ -6871,7 +7221,7 @@
                         },
                         "message": {
                           "type": "string",
-                          "default": "Subscription paused \u2014 complete payment to resume"
+                          "default": "Subscription paused — complete payment to resume"
                         },
                         "data": {
                           "type": "object",
@@ -6930,6 +7280,31 @@
               "application/json": {
                 "schema": {
                   "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
                     {
                       "type": "object",
                       "properties": {
@@ -7432,7 +7807,7 @@
                         },
                         "message": {
                           "type": "string",
-                          "default": "Subscription paused \u2014 complete payment to resume"
+                          "default": "Subscription paused — complete payment to resume"
                         },
                         "data": {
                           "type": "object",
@@ -7491,6 +7866,31 @@
               "application/json": {
                 "schema": {
                   "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
                     {
                       "type": "object",
                       "properties": {
@@ -7697,7 +8097,7 @@
       "post": {
         "operationId": "images.upload",
         "summary": "Upload an image (url)",
-        "description": "Upload an image by URL for use as a reference or edit subject. The server downloads, validates, and stores the image. Returns the image ID for use with the generate or edit endpoints via referenceImageIds, or as an edit subject via POST /images/{id}/edit.",
+        "description": "Upload an image by URL for use as a reference or edit subject. The server downloads and validates the image, then reuses an exact match in the brand session or stores a new one. Returns the canonical image ID and whether it already existed.",
         "tags": [
           "Images"
         ],
@@ -7716,11 +8116,12 @@
                   "brandSessionId": {
                     "type": "string",
                     "format": "uuid",
-                    "description": "Associate the upload with a brand session"
+                    "description": "Brand session to scope this upload to"
                   }
                 },
                 "required": [
-                  "imageUrl"
+                  "imageUrl",
+                  "brandSessionId"
                 ]
               }
             }
@@ -7753,6 +8154,10 @@
                         },
                         "mimeType": {
                           "type": "string"
+                        },
+                        "existing": {
+                          "type": "boolean",
+                          "description": "Whether Bloom reused an exact image already in this brand session"
                         }
                       },
                       "required": [
@@ -7760,7 +8165,8 @@
                         "imageUrl",
                         "width",
                         "height",
-                        "mimeType"
+                        "mimeType",
+                        "existing"
                       ]
                     }
                   },
@@ -7979,6 +8385,31 @@
                           "const": true
                         },
                         "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
                           "const": "FORBIDDEN"
                         },
                         "status": {
@@ -8153,7 +8584,7 @@
       "post": {
         "operationId": "images.uploadFile",
         "summary": "Upload an image (file)",
-        "description": "Upload raw image bytes (multipart/form-data) for use as a reference or edit subject. Use this when the image is local \u2014 for remote URLs, use POST /images/uploads. Returns an image ID and URL usable with the generate or edit endpoints.",
+        "description": "Upload raw image bytes (multipart/form-data) for use as a reference or edit subject. Use this when the image is local — for remote URLs, use POST /images/uploads. Returns the canonical image ID and whether an exact match already existed in the brand session.",
         "tags": [
           "Images"
         ],
@@ -8226,6 +8657,10 @@
                         },
                         "mimeType": {
                           "type": "string"
+                        },
+                        "existing": {
+                          "type": "boolean",
+                          "description": "Whether Bloom reused an exact image already in this brand session"
                         }
                       },
                       "required": [
@@ -8233,7 +8668,8 @@
                         "imageUrl",
                         "width",
                         "height",
-                        "mimeType"
+                        "mimeType",
+                        "existing"
                       ]
                     }
                   },
@@ -8395,6 +8831,31 @@
               "application/json": {
                 "schema": {
                   "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
                     {
                       "type": "object",
                       "properties": {
@@ -8576,7 +9037,7 @@
       "post": {
         "operationId": "images.uploadFileSigned",
         "summary": "Upload an image (signed)",
-        "description": "Upload raw image bytes (multipart/form-data) using a short-lived, single-use token minted via the bloom_create_image_upload_url MCP tool. The token in the path is the credential \u2014 no Authorization header is expected. Same validation/storage pipeline as POST /images/uploads/file. Returns an image ID and URL usable with the generate or edit endpoints.",
+        "description": "Upload raw image bytes (multipart/form-data) using a short-lived, single-use token minted via the bloom_create_image_upload_url MCP tool. The token in the path is the credential — no Authorization header is expected. Uses the same exact-match reuse pipeline as POST /images/uploads/file and returns the canonical image ID.",
         "tags": [
           "Images"
         ],
@@ -8655,6 +9116,10 @@
                         },
                         "mimeType": {
                           "type": "string"
+                        },
+                        "existing": {
+                          "type": "boolean",
+                          "description": "Whether Bloom reused an exact image already in this brand session"
                         }
                       },
                       "required": [
@@ -8662,7 +9127,8 @@
                         "imageUrl",
                         "width",
                         "height",
-                        "mimeType"
+                        "mimeType",
+                        "existing"
                       ]
                     }
                   },
@@ -8825,7 +9291,7 @@
       "post": {
         "operationId": "images.search",
         "summary": "Semantic Search",
-        "description": "Semantic search (powered by vector embeddings) over the brand session's library images, ranked nearest-first. Library images are those whose `source` is `uploaded` (added by the user) or `scraped` (pulled in during onboarding) \u2014 generated images are excluded. Pass `cursor` from the previous response to paginate.",
+        "description": "Semantic search (powered by vector embeddings) over the brand session's library images, ranked nearest-first. Library images are those whose `source` is `uploaded` (added by the user) or `scraped` (pulled in during onboarding) — generated images are excluded. Pass `cursor` from the previous response to paginate.",
         "tags": [
           "Images"
         ],
@@ -8845,7 +9311,7 @@
                     "type": "string",
                     "minLength": 1,
                     "maxLength": 500,
-                    "description": "Visual concept to search for. Plain noun phrases work best \u2014 e.g., 'drone in flight', 'team working at desks', 'product on white background'."
+                    "description": "Visual concept to search for. Plain noun phrases work best — e.g., 'drone in flight', 'team working at desks', 'product on white background'."
                   },
                   "limit": {
                     "type": "integer",
@@ -9115,6 +9581,31 @@
               "application/json": {
                 "schema": {
                   "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
                     {
                       "type": "object",
                       "properties": {
@@ -9410,6 +9901,31 @@
               "application/json": {
                 "schema": {
                   "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
                     {
                       "type": "object",
                       "properties": {
@@ -9774,6 +10290,31 @@
               "application/json": {
                 "schema": {
                   "oneOf": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "defined": {
+                          "const": true
+                        },
+                        "code": {
+                          "const": "ACCOUNT_BANNED"
+                        },
+                        "status": {
+                          "const": 403
+                        },
+                        "message": {
+                          "type": "string",
+                          "default": "This account has been suspended."
+                        },
+                        "data": {}
+                      },
+                      "required": [
+                        "defined",
+                        "code",
+                        "status",
+                        "message"
+                      ]
+                    },
                     {
                       "type": "object",
                       "properties": {
