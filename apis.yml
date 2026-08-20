@@ -42,6 +42,15 @@ modified: '2026-08-13'
 tags:
 - Company
 - Brand Management
+- Image-Generation
+- Artificial Intelligence
+- Agents
+- MCP
+- Marketing
+- Creative
+tags_raw:
+- Company
+- Brand Management
 - Image Generation
 - Artificial Intelligence
 - Agents
@@ -87,6 +96,8 @@ apis:
   humanURL: https://www.trybloom.ai/docs/api
   baseURL: https://www.trybloom.ai/api/v1
   tags:
+  - Image
+  tags_raw:
   - Images
   properties:
   - type: OpenAPI
