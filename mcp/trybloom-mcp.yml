@@ -64,22 +64,8 @@ tools:
 deployment:
   mode: remote
   endpoint: https://www.trybloom.ai/api/mcp
-  install: null
-  package: null
-  auth: oauth
   verified: probed
   probe: gated
-  checked: '2026-08-13'
-  source: >-
-    Re-probed 2026-08-13: POST tools/list (Accept application/json,
-    text/event-stream) returned HTTP 401 {"error":"unauthorized"} with
-    WWW-Authenticate: Bearer resource_metadata="https://www.trybloom.ai/.well-known/oauth-protected-resource/api/mcp".
-    That is a live remote MCP endpoint enforcing OAuth, not a stdio package —
-    there is nothing to npx install. The RFC 9728 document it names is saved at
-    well-known/trybloom-oauth-protected-resource-api-mcp.json.
-  live_schemas: >-
-    Gated. Tool inputSchemas require an authenticated introspection; the tools
-    listed above are the provider's published names/descriptions from
-    https://www.trybloom.ai/llms.txt, and their real parameter shapes are bound
-    to OpenAPI operations in mcp/trybloom-tool-crosswalk.yml.
+  checked: '2026-08-12'
+  source: catalog MCP census
 crosswalk: mcp/trybloom-tool-crosswalk.yml

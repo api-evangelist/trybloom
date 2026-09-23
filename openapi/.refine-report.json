@@ -1,9 +1,7 @@
 {
   "provider": "trybloom",
   "sources": [
-    "trybloom-account-api-openapi.yml",
-    "trybloom-brands-api-openapi.yml",
-    "trybloom-images-api-openapi.yml"
+    "_original/trybloom-api-openapi.json"
   ],
   "outputs": [
     "trybloom-account-api-openapi.yml",
@@ -14,10 +12,13 @@
   "errors": [],
   "warnings": [],
   "notes": [
-    "trybloom-account-api-openapi.yml: upgraded openapi 3.1.1 -> OpenAPI 3.2.0",
-    "trybloom-brands-api-openapi.yml: upgraded openapi 3.1.1 -> OpenAPI 3.2.0",
-    "trybloom-images-api-openapi.yml: upgraded openapi 3.1.1 -> OpenAPI 3.2.0",
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "trybloom-api-openapi.json: upgraded openapi 3.1.1 -> OpenAPI 3.2.0",
     "apis.yml register: already-registered"
   ],
-  "skipped": []
+  "skipped": [
+    "trybloom-account-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "trybloom-brands-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "trybloom-images-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
