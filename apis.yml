@@ -54,7 +54,7 @@ modified: '2026-08-13'
 tags:
 - Company
 - Brand Management
-- Image-Generation
+- Image Generation
 - Artificial Intelligence
 - Agents
 - MCP
@@ -69,6 +69,7 @@ tags_raw:
 - MCP
 - Marketing
 - Creative
+- Image-Generation
 apis:
 - aid: trybloom:trybloom-account-api
   name: Bloom Account API
