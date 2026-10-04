@@ -1,0 +1,26 @@
+slug: trybloom
+provider: Bloom
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: Brands
+  spec_file: trybloom-brands-api-openapi.yml
+  capability_id: BC-400.20
+  capability_id_l1: BC-400
+  capability_name: Brand Management
+  confidence: 0.75
+  evidence: 'openapi description: "Manage brands and brand identity."; PUT /brands/{id}/logo  brands.updateLogo  Update
+    brand logo (url)'
+  reason: Operations create, retrieve and maintain brand records and brand identity assets (logo), which
+    is brand identity stewardship. Held below 0.8 because the surface is a technical asset store for downstream
+    generation rather than a brand strategy/equity system.
