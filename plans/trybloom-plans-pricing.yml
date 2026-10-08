@@ -98,3 +98,56 @@ plans:
         metric: credits
         limit: 200
         timeFrame: purchase
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - one-time
+  - subscription
+  units:
+  - credit
+  - period
+  plans:
+  - name: Plus
+    access: other
+    model: subscription
+    model_how: stated
+    units:
+    - credit
+    - period
+    periods:
+    - month
+  - name: Pro
+    access: other
+    model: subscription
+    model_how: stated
+    units:
+    - credit
+    - period
+    periods:
+    - month
+  - name: Max
+    access: other
+    model: subscription
+    model_how: stated
+    units:
+    - credit
+    periods:
+    - month
+  - name: Scale
+    access: other
+    model: subscription
+    model_how: stated
+    units:
+    - credit
+    - period
+    periods:
+    - month
+  - name: Credit top-up
+    access: other
+    model: one-time
+    model_how: stated
+    units:
+    - credit
+    periods:
+    - other
