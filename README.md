@@ -72,20 +72,11 @@ Bloom (trybloom.ai) is the brand layer for agents — a Y Combinator (Spring 202
 
 Everything profiled for Bloom is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/trybloom/](https://apis.io/providers/trybloom/)** — or go straight to one of the APIs or properties below.
 
-### APIs (12)
+### APIs (3)
 
 - [Bloom Account API](https://apis.io/apis/trybloom/trybloom-account-api/) — Inspect the authenticated account — profile, credit balance, and accessible workspaces.
 - [Bloom Brands API](https://apis.io/apis/trybloom/trybloom-brands-api/) — Manage brands and brand identity.
 - [Bloom Images API](https://apis.io/apis/trybloom/trybloom-images-api/) — Generate, edit, and retrieve images.
-- [Bloom Audio API](https://apis.io/apis/trybloom/trybloom-audio-api/) — Retrieve and manage audio files.
-- [Bloom Briefs API](https://apis.io/apis/trybloom/trybloom-briefs-api/) — Get brand guidance and selected assets for a specific task.
-- [Bloom Feedback API](https://apis.io/apis/trybloom/trybloom-feedback-api/) — Report problems and observations about Rainbrand.
-- [Bloom Generations API](https://apis.io/apis/trybloom/trybloom-generations-api/) — Create and retrieve model generations.
-- [Bloom Library API](https://apis.io/apis/trybloom/trybloom-library-api/) — Add, list, and remove a brand's images, video, and audio.
-- [Bloom Models API](https://apis.io/apis/trybloom/trybloom-models-api/) — Find available models and check their inputs.
-- [Bloom Reviews API](https://apis.io/apis/trybloom/trybloom-reviews-api/) — Check an asset against a brand's color, typography, logo, and copy guidance.
-- [Bloom Uploads API](https://apis.io/apis/trybloom/trybloom-uploads-api/) — Stage private local files for brand sources, the Library, and other supported operations.
-- [Bloom Videos API](https://apis.io/apis/trybloom/trybloom-videos-api/) — Retrieve and manage video files.
 
 ### Published properties
 
@@ -103,12 +94,6 @@ Which operations an agent can call, which act, and which need a human in the loo
 
 - [Trybloom Agentic Access](https://apis.io/agentic-access/trybloom/trybloom-agentic-access/)
 
-#### JSON-LD (1)
-
-Linked-data contexts for the provider's vocabulary.
-
-- [Trybloom Context](https://apis.io/jsonld/trybloom/trybloom-context/)
-
 #### Collections (3)
 
 Postman and Open Collection request collections.
@@ -123,12 +108,6 @@ OpenAPI overlays, including conversational phrasing for each operation.
 
 - [Trybloom Api Overlay](https://apis.io/overlays/trybloom/trybloom-api-overlay/)
 
-#### Governance rules (1)
-
-Spectral rulesets for the provider's contracts.
-
-- [Bloom API Rules](https://apis.io/rules/trybloom/trybloom-rules/)
-
 #### Security (2)
 
 Authentication, trust centre, and vulnerability disclosure.
@@ -142,24 +121,17 @@ The permissions the API asks for.
 
 - [Trybloom Scopes](https://apis.io/scopes/trybloom/trybloom-scopes/)
 
-#### Plans and pricing (2)
+#### Plans and pricing (1)
 
 Published plans, tiers and prices.
 
 - [Trybloom Plans Pricing](https://apis.io/plans/trybloom/trybloom-plans-pricing/)
-- [Trybloom Price Estimates](https://apis.io/plans/trybloom/trybloom-price-estimates/)
 
 #### Rate limits (1)
 
 Published request limits.
 
 - [Trybloom Rate Limits](https://apis.io/rate-limits/trybloom/trybloom-rate-limits/)
-
-#### FinOps (1)
-
-What the API costs to run, by operation.
-
-- [Trybloom Finops](https://apis.io/finops/trybloom/trybloom-finops/)
 
 ## Where to find this API
 
@@ -172,8 +144,6 @@ Links to the company's own pages. This repository publishes no copy of their spe
 - [Pricing](https://www.trybloom.ai/pricing/)
 - [Sign up](https://www.trybloom.ai/auth/sign-up)
 - [Support](https://discord.gg/rncVAMSQ9f)
-- [Changelog](https://www.rainbrand.com/changelog/)
-- [Blog](https://www.rainbrand.com/blog/)
 - [Terms of service](https://www.trybloom.ai/terms/)
 - [Privacy policy](https://www.trybloom.ai/privacy/)
 - [GitHub](https://github.com/trybloomai)
